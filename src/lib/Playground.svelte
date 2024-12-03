@@ -1,0 +1,458 @@
+<script lang="ts">
+  import Button from '$lib/Button.svelte'
+  import { compile, jsonquery, type JSONQuery, parse, stringify } from '@jsonquerylang/jsonquery'
+  import { Formatter, FracturedJsonOptions } from 'fracturedjsonjs'
+  import Debugger from '$lib/Debugger.svelte'
+  import type {
+    JSON,
+    JSONQueryError,
+    Output,
+    OutputError,
+    ProcessedQueryText,
+    QueryJSONError,
+    QueryJSONFormat,
+    QueryText,
+    QueryTextError,
+    QueryTextFormat
+  } from '$lib/types'
+
+  const props = $props<{ input: string; query: string }>()
+
+  if (typeof window !== 'undefined') {
+    // @ts-ignore
+    window['jsonquery'] = { jsonquery, stringify, parse, compile }
+  }
+
+  let input = $state(props.input)
+
+  let queryTab: 'text' | 'json' = $state('text')
+
+  let query: QueryText = $state({
+    textFormat: props.query
+  })
+
+  let processedQuery: ProcessedQueryText = $derived(processQuery(query))
+
+  let output = $derived(go(input, processedQuery))
+
+  let debugError: JSONQueryError | null = $state(null)
+
+  function processQuery(query: QueryText): ProcessedQueryText {
+    // FIXME: simplify process query
+    if (isTextFormat(query)) {
+      try {
+        const queryJson = parse(query.textFormat)
+        return {
+          textFormat: query.textFormat,
+          jsonFormat: stringifyJson(queryJson),
+          queryJson
+        }
+      } catch (err) {
+        return {
+          textFormat: query.textFormat,
+          jsonError: err as Error
+        }
+      }
+    } else {
+      try {
+        const queryJson = JSON.parse(query.jsonFormat)
+        return {
+          jsonFormat: query.jsonFormat,
+          textFormat: stringify(queryJson),
+          queryJson
+        }
+      } catch (err) {
+        return {
+          jsonFormat: query.jsonFormat,
+          textError: err as Error
+        }
+      }
+    }
+  }
+
+  function go(inputText: string, query: ProcessedQueryText): Output {
+    if (isTextError(query)) {
+      return {
+        error: query.textError
+      }
+    }
+
+    if (isJSONError(query)) {
+      return {
+        error: query.jsonError
+      }
+    }
+
+    try {
+      const input = JSON.parse(inputText)
+
+      return {
+        json: jsonquery(input, query.queryJson) as JSON
+      }
+    } catch (err) {
+      console.error(err)
+      return {
+        error: err as Error
+      }
+    }
+  }
+
+  function stringifyJson(json: unknown) {
+    const formatter = new Formatter()
+    formatter.Options = new FracturedJsonOptions()
+    formatter.Options.MaxTotalLineLength = 55
+    formatter.Options.IndentSpaces = 2
+    formatter.Options.MaxInlineComplexity = 3
+    formatter.Options.SimpleBracketPadding = false
+    formatter.Options.NestedBracketPadding = false
+    formatter.Options.OmitTrailingWhitespace = true
+
+    return formatter.Reformat(JSON.stringify(json, null, 2))
+  }
+
+  function isTextFormat(query: QueryText): query is QueryTextFormat {
+    return query && 'textFormat' in query
+  }
+
+  function isTextError(query: unknown): query is QueryTextError {
+    return !!query && 'textError' in (query as Record<string, unknown>)
+  }
+
+  function isJSONFormat(query: QueryText): query is QueryJSONFormat {
+    return query && 'jsonFormat' in query
+  }
+
+  function isJSONError(query: unknown): query is QueryJSONError {
+    return !!query && 'jsonError' in (query as Record<string, unknown>)
+  }
+
+  function isOutputError(output: Output): output is OutputError {
+    return output && 'error' in output
+  }
+
+  function isJSONQueryError(error: Error): error is JSONQueryError {
+    return error && 'jsonquery' in error
+  }
+
+  function handleChangeTextQuery(
+    event: Event & { currentTarget: EventTarget & HTMLTextAreaElement }
+  ) {
+    query = {
+      textFormat: event.currentTarget?.value
+    }
+  }
+
+  function handleChangeJSONQuery(
+    event: Event & { currentTarget: EventTarget & HTMLTextAreaElement }
+  ) {
+    query = {
+      jsonFormat: event.currentTarget?.value
+    }
+  }
+
+  function stringifyError(error: Error | JSONQueryError): string {
+    const errorStack: { query: JSONQuery }[] | null = 'jsonquery' in error ? error.jsonquery : null
+    if (errorStack) {
+      const lastQuery = errorStack[errorStack.length - 1].query
+      return `${error}\n\nWhilst executing the following part of the query:\n\n${JSON.stringify(lastQuery)}`
+    } else {
+      return String(error)
+    }
+  }
+</script>
+
+<div class="playground">
+  <div class="column">
+    <label for="input-text">Input</label>
+    <textarea
+      id="input-text"
+      autocomplete="off"
+      autocapitalize="off"
+      spellcheck="false"
+      bind:value={input}
+    ></textarea>
+  </div>
+  <div class="column">
+    <div class="row">
+      <div class="tab-section text-format">
+        <div class="tabs">
+          <label class="query-label" for="query-text">Query</label>
+          <label for="query-text"
+            ><button
+              title="Text format"
+              class:selected={queryTab === 'text'}
+              onclick={() => (queryTab = 'text')}>Text</button
+            ></label
+          >
+          <label for="query-json"
+            ><button
+              title="JSON format"
+              class:selected={queryTab === 'json'}
+              onclick={() => (queryTab = 'json')}>JSON</button
+            ></label
+          >
+        </div>
+        <div class="tab-contents">
+          <textarea
+            id="query-text"
+            autocomplete="off"
+            autocapitalize="off"
+            spellcheck="false"
+            class:selected={queryTab === 'text'}
+            oninput={handleChangeTextQuery}
+            >{isTextFormat(processedQuery)
+              ? processedQuery.textFormat
+              : processedQuery.textError}</textarea
+          >
+          <textarea
+            id="query-json"
+            autocomplete="off"
+            autocapitalize="off"
+            spellcheck="false"
+            class:selected={queryTab === 'json'}
+            oninput={handleChangeJSONQuery}
+            >{isJSONFormat(processedQuery)
+              ? processedQuery.jsonFormat
+              : processedQuery.jsonError}</textarea
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="column">
+    <label for="output-text">Output</label>
+    {#if isOutputError(output)}
+      {@const error = output.error}
+      {#if isJSONQueryError(error)}
+        <Button
+          type="button"
+          onclick={() => {
+            debugError = isJSONQueryError(error) ? error : null
+            console.log('click!', debugError)
+          }}>Debug</Button
+        >
+      {/if}
+      <textarea id="output-text" readonly class="error">{stringifyError(output.error)}</textarea>
+    {:else}
+      <textarea id="output-text" readonly>{stringifyJson(output.json)}</textarea>
+    {/if}
+  </div>
+  <div class="column">
+    <label for="output-text">Quick Reference</label>
+    <div class="quick-reference">
+      <!-- FIXME: implement the quick reference -->
+      <!--      <details>-->
+      <!--        <summary>-->
+      <!--          <span class="category">Function</span>-->
+      <!--          <code>name(argument1, argument2, ...)</code>-->
+      <!--        </summary>-->
+      <!--      </details>-->
+    </div>
+  </div>
+</div>
+
+{#if debugError}
+  <Debugger error={debugError} onClose={() => (debugError = null)} />
+{/if}
+
+<style>
+  .playground {
+    flex: 1;
+    align-self: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    overflow: hidden;
+
+    padding: 10px 10px 20px;
+    margin: 0;
+    gap: 10px;
+    width: 1020px; /* 1000 + 2 * padding */
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .column {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    min-height: 220px;
+  }
+
+  .row {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tab-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    .tabs {
+      display: flex;
+      align-items: end;
+      gap: var(--tab-border-width);
+      padding: 0 var(--tab-border-width);
+
+      label {
+        margin: 0;
+      }
+
+      .query-label {
+        flex: 1;
+        margin: 0 0 2px;
+      }
+
+      button {
+        margin: 0;
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
+        background: white;
+        border: 1px solid var(--theme-color);
+        border-bottom: none;
+        color: var(--color);
+        font-family: inherit;
+        font-size: inherit;
+        padding: 2px 10px 5px;
+        cursor: pointer;
+
+        &:hover {
+          background: var(--theme-color-highlight);
+        }
+
+        &.selected {
+          background: var(--theme-color);
+          padding: 5px 10px;
+        }
+      }
+    }
+
+    .tab-contents {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      border-radius: var(--border-radius);
+      padding: var(--tab-border-width);
+      margin-bottom: -5px;
+      background: var(--theme-color);
+
+      textarea:not(.selected) {
+        display: none;
+
+        /*TODO: only hide the textarea so the history (undo/redo) is remembered */
+        /*flex: none;*/
+        /*visibility: hidden;*/
+        /*width: 0;*/
+        /*height: 0;*/
+      }
+    }
+  }
+
+  @media (max-width: 860px) {
+    .playground {
+      display: flex;
+      flex-direction: column;
+      overflow: visible;
+    }
+
+    .column {
+      display: flex;
+    }
+
+    .row {
+      min-height: 110px;
+    }
+  }
+
+  label {
+    font-weight: bold;
+    margin-top: var(--padding);
+    margin-bottom: 7px;
+  }
+
+  textarea {
+    flex: 1;
+    width: 100%;
+    border: 1px solid #bfbfbf;
+    border-radius: var(--border-radius);
+    padding: 5px;
+    box-sizing: border-box;
+    font-family: monospace;
+    resize: none;
+  }
+
+  .quick-reference {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    line-height: 1.3em;
+    gap: 5px;
+    border: 1px solid #dcdcdc;
+    border-radius: var(--border-radius);
+    padding: 10px;
+  }
+
+  details {
+    display: flex;
+    min-height: min-content;
+  }
+
+  details p {
+    padding: 0;
+    margin: 0.5em 0;
+  }
+
+  details p:first-child {
+    margin-top: 0;
+  }
+
+  details p:last-child {
+    margin-bottom: 0;
+  }
+
+  details ul {
+    margin: 0;
+  }
+
+  code {
+    background: rgba(0, 0, 0, 0.05);
+    padding: 3px;
+    border-radius: var(--border-radius);
+  }
+
+  pre {
+    background: rgba(0, 0, 0, 0.05);
+    padding: 3px;
+    border-radius: var(--border-radius);
+  }
+
+  pre code {
+    background: none;
+  }
+
+  #output-text.error {
+    color: var(--error-color);
+  }
+
+  .function-reference a,
+  .operator-reference a {
+    text-decoration: none;
+  }
+
+  summary {
+    cursor: pointer;
+  }
+
+  summary .category {
+    min-width: 80px;
+    display: inline-block;
+  }
+
+  .details-content {
+    padding: 0.5em;
+    margin: 0.5em 0 0.5em 30px;
+    border-radius: var(--border-radius);
+  }
+</style>

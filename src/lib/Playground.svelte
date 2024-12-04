@@ -1,7 +1,6 @@
 <script lang="ts">
   import Button from '$lib/Button.svelte'
   import { compile, jsonquery, type JSONQuery, parse, stringify } from '@jsonquerylang/jsonquery'
-  import { Formatter, FracturedJsonOptions } from 'fracturedjsonjs'
   import Debugger from '$lib/Debugger.svelte'
   import type {
     JSON,
@@ -13,6 +12,7 @@
     QueryTextFormat
   } from '$lib/types'
   import QuickReference from '$lib/QuickReference.svelte'
+  import { stringifyJson } from '$lib/stringifyJson'
 
   const props = $props<{ input: string; query: string }>()
 
@@ -80,19 +80,6 @@
         error: err as Error
       }
     }
-  }
-
-  function stringifyJson(json: unknown) {
-    const formatter = new Formatter()
-    formatter.Options = new FracturedJsonOptions()
-    formatter.Options.MaxTotalLineLength = 55
-    formatter.Options.IndentSpaces = 2
-    formatter.Options.MaxInlineComplexity = 3
-    formatter.Options.SimpleBracketPadding = false
-    formatter.Options.NestedBracketPadding = false
-    formatter.Options.OmitTrailingWhitespace = true
-
-    return formatter.Reformat(JSON.stringify(json, null, 2))
   }
 
   function isTextFormat(query: QueryText): query is QueryTextFormat {

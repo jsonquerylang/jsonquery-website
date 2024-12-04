@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { JSONQueryError } from '$lib/types'
   import { onMount } from 'svelte'
+  import { stringifyJson } from '$lib/stringifyJson'
 
   let { error, onClose } = $props<{ error: JSONQueryError; onClose: () => void }>()
 
@@ -52,11 +53,11 @@
     <div class="debug-columns">
       <div class="debug-column">
         <label class="debug-label" for="error-data">Input</label>
-        <textarea class="debug-content" readonly>{JSON.stringify(current.data, null, 2)}</textarea>
+        <textarea class="debug-content" readonly>{stringifyJson(current.data)}</textarea>
       </div>
       <div class="debug-column">
         <label class="debug-label" for="error-query">Query</label>
-        <textarea class="debug-content" readonly>{JSON.stringify(current.query, null, 2)}</textarea>
+        <textarea class="debug-content" readonly>{stringifyJson(current.query)}</textarea>
       </div>
     </div>
   </div>

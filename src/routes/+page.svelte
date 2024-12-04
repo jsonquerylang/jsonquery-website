@@ -3,7 +3,6 @@
   import Button from '$lib/Button.svelte'
 
   const example1 = {
-    id: 1,
     input: `{
   "friends": [
     {"name": "Chris", "age": 23, "city": "New York"},
@@ -22,7 +21,6 @@
   }
 
   const example2 = {
-    id: 2,
     input: `[
   {"name": "Chris", "age": 23, "city": "New York"},
   {"name": "Emily", "age": 19, "city": "Atlanta"},
@@ -37,7 +35,6 @@
   }
 
   const example3 = {
-    id: 3,
     input: example2.input,
     query: `map({
   firstName: .name,
@@ -50,7 +47,6 @@
   }
 
   const example4 = {
-    id: 4,
     input: example2.input,
     query: `{
   names: map(.name),
@@ -61,7 +57,6 @@
   }
 
   const example5 = {
-    id: 5,
     input: `[
   { "name": "bread", "price": 2.5, "quantity": 2 },
   { "name": "milk", "price": 1.2, "quantity": 3 }
@@ -106,9 +101,7 @@
       <Button class="example" onclick={() => (example = example5)}>example 5</Button>
     </div>
   </div>
-  {#key example.id}
-    <Playground input={example.input} query={example.query} />
-  {/key}
+  <Playground input={example.input} query={example.query} />
 </div>
 
 <style>

@@ -146,6 +146,7 @@
           flex: 1;
           min-height: 150px;
           min-width: 300px;
+          resize: none;
         }
       }
     }

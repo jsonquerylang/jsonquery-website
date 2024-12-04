@@ -26,6 +26,11 @@
   let query: QueryText = $state({ textFormat: props.query })
   let debugError: JSONQueryError | null = $state(null)
 
+  $effect(() => {
+    input = props.input
+    query = { textFormat: props.query }
+  })
+
   let processedQuery: ProcessedQuery = $derived(processQuery(query))
   let output = $derived(go(input, processedQuery))
 
@@ -328,7 +333,7 @@
     border-radius: var(--border-radius);
     padding: 5px;
     box-sizing: border-box;
-    font-family: var(--font-family-mono);
+    font-family: var(--font-family-mono), monospace;
     font-size: var(--font-size-mono);
     color: inherit;
     resize: none;

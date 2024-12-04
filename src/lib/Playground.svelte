@@ -1,6 +1,6 @@
 <script lang="ts">
   import Button from '$lib/Button.svelte'
-  import { compile, jsonquery, type JSONQuery, parse, stringify } from '@jsonquerylang/jsonquery'
+  import { jsonquery, type JSONQuery, parse, stringify } from '@jsonquerylang/jsonquery'
   import Debugger from '$lib/Debugger.svelte'
   import type {
     JSON,
@@ -14,23 +14,17 @@
   import QuickReference from '$lib/QuickReference.svelte'
   import { stringifyJson } from '$lib/stringifyJson'
 
-  const props = $props<{ input: string; query: string }>()
+  let {
+    input = $bindable('input'),
+    query = $bindable('query'),
+    queryTab = $bindable('queryTab')
+  } = $props<{
+    input: string
+    query: QueryText
+    queryTab: 'text' | 'json'
+  }>()
 
-  if (typeof window !== 'undefined') {
-    // @ts-ignore
-    window['jsonquery'] = { jsonquery, stringify, parse, compile }
-  }
-
-  let input = $state(props.input)
-  let queryTab: 'text' | 'json' = $state('text')
-  let query: QueryText = $state({ textFormat: props.query })
   let debugError: JSONQueryError | null = $state(null)
-
-  $effect(() => {
-    input = props.input
-    query = { textFormat: props.query }
-  })
-
   let processedQuery: ProcessedQuery = $derived(processQuery(query))
   let output = $derived(go(input, processedQuery))
 

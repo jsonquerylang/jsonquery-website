@@ -1,71 +1,32 @@
-<script>
+<script lang="ts">
   import Playground from '$lib/Playground.svelte'
   import Button from '$lib/Button.svelte'
+  import { loadLocalStorage, saveLocalStorage } from '$lib/runes/localStorageState.svelte'
+  import type { QueryText } from '$lib/types'
+  import { compile, jsonquery, parse, stringify } from '@jsonquerylang/jsonquery'
+  import { examples } from '$lib/data/examples'
 
-  const example1 = {
-    input: `{
-  "friends": [
-    {"name": "Chris", "age": 23, "city": "New York"},
-    {"name": "Emily", "age": 19, "city": "Atlanta"},
-    {"name": "Joe", "age": 32, "city": "New York"},
-    {"name": "Kevin", "age": 19, "city": "Atlanta"},
-    {"name": "Michelle", "age": 27, "city": "Los Angeles"},
-    {"name": "Robert", "age": 45, "city": "Manhattan"},
-    {"name": "Sarah", "age": 31, "city": "New York"}
-  ]
-}`,
-    query: `.friends
-  | filter(.city == "New York")
-  | sort(.age)
-  | pick(.name, .age)`
+  if (typeof window !== 'undefined') {
+    // @ts-ignore
+    window['jsonquery'] = { jsonquery, stringify, parse, compile }
   }
 
-  const example2 = {
-    input: `[
-  {"name": "Chris", "age": 23, "city": "New York"},
-  {"name": "Emily", "age": 19, "city": "Atlanta"},
-  {"name": "Joe", "age": 32, "city": "New York"},
-  {"name": "Kevin", "age": 19, "city": "Atlanta"},
-  {"name": "Michelle", "age": 27, "city": "Los Angeles"},
-  {"name": "Robert", "age": 45, "city": "Manhattan"},
-  {"name": "Sarah", "age": 31, "city": "New York"}
-]
-`,
-    query: `filter((.city == "New York") and (.age > 30))\n`
-  }
+  const keyInput = 'playground-input'
+  const keyQuery = 'playground-query'
+  const keyQueryTab = 'playground-query-tab'
 
-  const example3 = {
-    input: example2.input,
-    query: `map({
-  firstName: .name,
-  details: {
-    city: .city,
-    age: .age
-  }
-})
-`
-  }
+  let input = $state(loadLocalStorage(keyInput, examples[0].input))
+  let queryTab: 'text' | 'json' = $state(loadLocalStorage(keyQueryTab, 'text'))
+  let query: QueryText = $state(loadLocalStorage(keyQuery, { textFormat: examples[0].query }))
 
-  const example4 = {
-    input: example2.input,
-    query: `{
-  names: map(.name),
-  count: size(),
-  averageAge: map(.age) | average()
-}
-`
-  }
+  $effect(() => saveLocalStorage(keyInput, input))
+  $effect(() => saveLocalStorage(keyQuery, query))
+  $effect(() => saveLocalStorage(keyQueryTab, queryTab))
 
-  const example5 = {
-    input: `[
-  { "name": "bread", "price": 2.5, "quantity": 2 },
-  { "name": "milk", "price": 1.2, "quantity": 3 }
-]
-`,
-    query: `map(.price * .quantity) | sum()\n`
+  function loadExample(example: { input: string; query: string }) {
+    input = example.input
+    query = { textFormat: example.query }
   }
-
-  let example = $state(example1)
 </script>
 
 <div class="app">
@@ -94,14 +55,12 @@
   </div>
   <div class="examples">
     <div class="examples-inner">
-      <Button class="example" onclick={() => (example = example1)}>example 1</Button>
-      <Button class="example" onclick={() => (example = example2)}>example 2</Button>
-      <Button class="example" onclick={() => (example = example3)}>example 3</Button>
-      <Button class="example" onclick={() => (example = example4)}>example 4</Button>
-      <Button class="example" onclick={() => (example = example5)}>example 5</Button>
+      {#each examples as example}
+        <Button class="example" onclick={() => loadExample(example)}>{example.name}</Button>
+      {/each}
     </div>
   </div>
-  <Playground input={example.input} query={example.query} />
+  <Playground bind:input bind:query bind:queryTab />
 </div>
 
 <style>

@@ -1,0 +1,149 @@
+[
+  {
+    "name": "Function",
+    "syntax": "name(argument1, argument2, ...)",
+    "description": "A <b>function</b> is defined as a function name followed by comma separated arguments wrapped in round brackets. it is important to understand functions like <code>filter</code>, <code>sort</code>, and <code>max</code> are executed as a method in a chain: the operation is applied to the data input, and forwarded to the next method in the chain (if any).",
+    "examples": ["sort(.address.city, \"asc\")", "filter(.age >= 21) | sort(.age, \"asc\")"],
+    "documentation": { "title": "Functions", "urlAnchor": "functions" },
+    "references": [
+      { "urlAnchor": "get", "syntax": "get(prop1, prop2)" },
+      { "urlAnchor": "filter", "syntax": "filter(condition)" },
+      { "urlAnchor": "sort", "syntax": "sort(property, direction)" },
+      { "urlAnchor": "reverse", "syntax": "reverse()" },
+      { "urlAnchor": "pick", "syntax": "pick(property1, property2, ...)" },
+      { "urlAnchor": "map", "syntax": "map(callback)" },
+      { "urlAnchor": "mapObject", "syntax": "mapObject(callback)" },
+      { "urlAnchor": "mapKeys", "syntax": "mapKeys(callback)" },
+      { "urlAnchor": "mapValues", "syntax": "mapValues(callback)" },
+      { "urlAnchor": "pipe", "syntax": "pipe(query1, query2, ...)" },
+      {
+        "urlAnchor": "object",
+        "syntax": "object({ prop1: query1, prop2: query2, ...)"
+      },
+      { "urlAnchor": "array", "syntax": "array(query1, query2, ...)" },
+      { "urlAnchor": "groupBy", "syntax": "groupBy(property)" },
+      { "urlAnchor": "keyBy", "syntax": "keyBy(property)" },
+      { "urlAnchor": "keys", "syntax": "keys()" },
+      { "urlAnchor": "values", "syntax": "values()" },
+      { "urlAnchor": "flatten", "syntax": "flatten()" },
+      { "urlAnchor": "join", "syntax": "join(separator)" },
+      { "urlAnchor": "split", "syntax": "split(text, separator)" },
+      { "urlAnchor": "substring", "syntax": "substring(text, start, end)" },
+      { "urlAnchor": "uniq", "syntax": "uniq()" },
+      { "urlAnchor": "uniqBy", "syntax": "uniqBy(property)" },
+      { "urlAnchor": "limit", "syntax": "limit(size)" },
+      { "urlAnchor": "size", "syntax": "size()" },
+      { "urlAnchor": "sum", "syntax": "sum()" },
+      { "urlAnchor": "min", "syntax": "min()" },
+      { "urlAnchor": "max", "syntax": "max()" },
+      { "urlAnchor": "prod", "syntax": "prod()" },
+      { "urlAnchor": "average", "syntax": "average()" },
+      { "title": "not", "urlAnchor": "not", "syntax": "not(value)" },
+      { "title": "exists", "urlAnchor": "exists", "syntax": "exists(property)" },
+      {
+        "title": "if",
+        "urlAnchor": "if",
+        "syntax": "if(condition, valueIfTrue, valueIfFalse)"
+      },
+      {
+        "title": "regex",
+        "urlAnchor": "regex",
+        "syntax": "regex(text, expression, options)"
+      },
+      { "urlAnchor": "round", "syntax": "round(value, digits)" },
+      { "urlAnchor": "abs", "syntax": "abs(value)" },
+      { "urlAnchor": "number", "syntax": "number(text)" },
+      { "urlAnchor": "string", "syntax": "string(number)" }
+    ]
+  },
+  {
+    "name": "Operator",
+    "syntax": "(left operator right)",
+    "description": "JSON Query supports all basic <b>operators</b>. When composing multiple operators,\n                  it is necessary to use parentheses. Operators do not have precedence since\n                  parentheses are required.",
+    "examples": [".age >= 18)", "(.age >= 18) and (.age <= 65))"],
+    "documentation": { "title": "Operators", "urlAnchor": "operators" },
+    "references": [
+      { "title": "equal", "urlAnchor": "eq-", "syntax": "a == b" },
+      { "title": "greater than", "urlAnchor": "gt-", "syntax": "a > b" },
+      {
+        "title": "greater than or equal to",
+        "urlAnchor": "gte-",
+        "syntax": "a >= b"
+      },
+      { "title": "less than", "urlAnchor": "lt-", "syntax": "a < b" },
+      {
+        "title": "less than or equal to",
+        "urlAnchor": "lte-",
+        "syntax": "a <= b"
+      },
+      { "title": "not equal", "urlAnchor": "ne-", "syntax": "a != b" },
+      { "title": "and", "urlAnchor": "and", "syntax": "a and b" },
+      { "title": "or", "urlAnchor": "or", "syntax": "a or b" },
+      {
+        "title": "in",
+        "urlAnchor": "in",
+        "syntax": "a in [value1, value2, ...]"
+      },
+      {
+        "title": "not in",
+        "urlAnchor": "not-in",
+        "syntax": "a not in [value1, value2, ...]"
+      },
+      { "title": "add", "urlAnchor": "add-", "syntax": "a + b" },
+      { "title": "subtract", "urlAnchor": "subtract-", "syntax": "a - b" },
+      { "title": "multiply", "urlAnchor": "multiply-", "syntax": "a * b" },
+      { "title": "divide", "urlAnchor": "divide-", "syntax": "a / b" },
+      { "title": "power", "urlAnchor": "pow-", "syntax": "a ^ b" },
+      { "title": "remainder", "urlAnchor": "mod-", "syntax": "a % b" }
+    ]
+  },
+  {
+    "name": "Pipe",
+    "syntax": "query2 | query2 | ...",
+    "description": "A <b>pipe</b> is an array containing a series of queries. The queries in the pipeline are executed one by one, and the output of the first is the input for the next.",
+    "examples": ["filter(.age >= 18) | sort(.name)"],
+    "documentation": { "title": "Pipes", "urlAnchor": "pipes" },
+    "references": []
+  },
+  {
+    "name": "Object",
+    "syntax": "{\"prop1\": \"query1\", \"prop2\": \"query2\", ...}",
+    "description": "An <b>object</b> is defined as a regular JSON object with a property name as key, and a query as value. Objects can be used to transform data or to execute multiple query pipelines in parallel.",
+    "examples": ["{\n  names: map(.name),\n  numberOfNames: size()\n}"],
+    "documentation": { "title": "Objects", "urlAnchor": "objects" },
+    "references": []
+  },
+  {
+    "name": "Array",
+    "syntax": "[query1, query2, ...]",
+    "description": "An <b>array</b> is defined as a regular JSON array: enclosed in square brackets, with items separated by a comma.",
+    "examples": ["filter(.city in [\"New York\", \"Atlanta\"])"],
+    "documentation": { "title": "Arrays", "urlAnchor": "arrays" },
+    "references": []
+  },
+  {
+    "name": "Property",
+    "syntax": ".prop1.prop2",
+    "description": "A <b>property</b> retrieves a property from an object. Multiple consecutive properties will retrieve a nested property.",
+    "examples": [".age", ".address.city", "first name", "get()", "get(\"address\", \"city\")"],
+    "documentation": { "title": "Properties", "urlAnchor": "properties" },
+    "references": []
+  },
+  {
+    "name": "Value",
+    "syntax": "\"string\", number, boolean, null",
+    "description": "JSON Query supports the following primitive <b>values</b>, the same as in <a href=\"https://www.json.org\" target=\"_blank\">JSON</a>: <code>\"string\"</code>, <code>number</code>, <code>boolean</code>, <code>null</code>.",
+    "examples": [
+      "\"Hello world\"",
+      "\"Multi line text\\nwith \\\"quoted\\\" contents\"",
+      "42",
+      "2.74",
+      "-1.2e3",
+      "true",
+      "false",
+      "null"
+    ],
+    "documentation": { "title": "Values", "urlAnchor": "values" },
+    "references": []
+  }
+]

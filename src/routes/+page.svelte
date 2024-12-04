@@ -115,30 +115,14 @@
   :root {
     --theme-color: #d5f3bb;
     --theme-color-highlight: #e1f6ce;
+    --font-family-mono: consolas, menlo, monaco, 'Ubuntu Mono', 'source-code-pro', monospace;
+    --font-size-mono: 14px;
     --background-color: #fafafa;
     --color: #222b00;
     --error-color: #f65252;
     --padding: 10px;
     --border-radius: 3px;
     --tab-border-width: 5px;
-  }
-
-  .app,
-  textarea {
-    font-family: ubuntu, arial, sans-serif;
-    color: #4d4d4d;
-  }
-
-  a {
-    color: #37a4b9;
-  }
-  a:hover {
-    color: #3fbdd6;
-  }
-
-  body {
-    display: flex;
-    justify-content: center;
   }
 
   .app {

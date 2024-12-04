@@ -15,6 +15,7 @@
     QueryTextError,
     QueryTextFormat
   } from '$lib/types'
+  import QuickReference from '$lib/QuickReference.svelte'
 
   const props = $props<{ input: string; query: string }>()
 
@@ -240,13 +241,7 @@
   <div class="column">
     <label for="output-text">Quick Reference</label>
     <div class="quick-reference">
-      <!-- FIXME: implement the quick reference -->
-      <!--      <details>-->
-      <!--        <summary>-->
-      <!--          <span class="category">Function</span>-->
-      <!--          <code>name(argument1, argument2, ...)</code>-->
-      <!--        </summary>-->
-      <!--      </details>-->
+      <QuickReference />
     </div>
   </div>
 </div>
@@ -378,7 +373,8 @@
     border-radius: var(--border-radius);
     padding: 5px;
     box-sizing: border-box;
-    font-family: monospace;
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-mono);
     resize: none;
   }
 
@@ -394,65 +390,7 @@
     padding: 10px;
   }
 
-  details {
-    display: flex;
-    min-height: min-content;
-  }
-
-  details p {
-    padding: 0;
-    margin: 0.5em 0;
-  }
-
-  details p:first-child {
-    margin-top: 0;
-  }
-
-  details p:last-child {
-    margin-bottom: 0;
-  }
-
-  details ul {
-    margin: 0;
-  }
-
-  code {
-    background: rgba(0, 0, 0, 0.05);
-    padding: 3px;
-    border-radius: var(--border-radius);
-  }
-
-  pre {
-    background: rgba(0, 0, 0, 0.05);
-    padding: 3px;
-    border-radius: var(--border-radius);
-  }
-
-  pre code {
-    background: none;
-  }
-
   #output-text.error {
     color: var(--error-color);
-  }
-
-  .function-reference a,
-  .operator-reference a {
-    text-decoration: none;
-  }
-
-  summary {
-    cursor: pointer;
-  }
-
-  summary .category {
-    min-width: 80px;
-    display: inline-block;
-  }
-
-  .details-content {
-    padding: 0.5em;
-    margin: 0.5em 0 0.5em 30px;
-    border-radius: var(--border-radius);
   }
 </style>

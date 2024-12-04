@@ -116,7 +116,7 @@
     --theme-color: #d5f3bb;
     --theme-color-highlight: #e1f6ce;
     --font-family-mono: consolas, menlo, monaco, 'Ubuntu Mono', 'source-code-pro', monospace;
-    --font-size-mono: 14px;
+    --font-size-mono: 13px;
     --background-color: #fafafa;
     --color: #222b00;
     --error-color: #f65252;

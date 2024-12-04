@@ -107,7 +107,7 @@
   },
   {
     "name": "Object",
-    "syntax": "{\"prop1\": \"query1\", \"prop2\": \"query2\", ...}",
+    "syntax": "{prop1: query1, prop2: query2, ...}",
     "description": "An <b>object</b> is defined as a regular JSON object with a property name as key, and a query as value. Objects can be used to transform data or to execute multiple query pipelines in parallel.",
     "examples": ["{\n  names: map(.name),\n  numberOfNames: size()\n}"],
     "documentation": { "title": "Objects", "urlAnchor": "objects" },
@@ -125,7 +125,7 @@
     "name": "Property",
     "syntax": ".prop1.prop2",
     "description": "A <b>property</b> retrieves a property from an object. Multiple consecutive properties will retrieve a nested property.",
-    "examples": [".age", ".address.city", "first name", "get()", "get(\"address\", \"city\")"],
+    "examples": [".age", ".address.city", "\"first name\"", "get()", "get(\"address\", \"city\")"],
     "documentation": { "title": "Properties", "urlAnchor": "properties" },
     "references": []
   },

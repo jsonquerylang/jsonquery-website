@@ -375,6 +375,7 @@
     box-sizing: border-box;
     font-family: var(--font-family-mono);
     font-size: var(--font-size-mono);
+    color: inherit;
     resize: none;
   }
 

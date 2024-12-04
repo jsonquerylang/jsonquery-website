@@ -16,7 +16,13 @@
       <p>
         {@html category.description}
       </p>
-      <p>Examples:</p>
+      <p>
+        {#if category.examples.length === 1}
+          Example:
+        {:else}
+          Examples:
+        {/if}
+      </p>
       {#each category.examples as example}
         <pre><code>{example}</code></pre>
       {/each}
@@ -26,7 +32,8 @@
           >{category.documentation.title}</a
         >
       </p>
-      {#if category.references}
+      {#if category.references?.length > 0}
+        <p>{category.name} reference:</p>
         <ul class="reference">
           {#each category.references as reference}
             <li>
@@ -46,6 +53,7 @@
 <style>
   details {
     display: flex;
+    flex-direction: column;
     min-height: min-content;
   }
 

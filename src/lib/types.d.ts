@@ -9,13 +9,15 @@ export type JSONQueryError = Error & { jsonquery: { query: JSON }[] }
 
 export type QueryTextFormat = { textFormat: string }
 export type QueryJSONFormat = { jsonFormat: string }
-export type QueryTextError = { textError: Error }
-export type QueryJSONError = { jsonError: Error }
 export type QueryText = QueryTextFormat | QueryJSONFormat
 
-export type ProcessedQueryText =
-  | (QueryTextFormat & (({ queryJson: JSONQuery } & QueryJSONFormat) | QueryJSONError))
-  | (QueryJSONFormat & (({ queryJson: JSONQuery } & QueryTextFormat) | QueryTextError))
+export type ProcessedQuery = {
+  textFormat?: string
+  jsonFormat?: string
+  queryJson?: JSONQuery
+  textError?: Error
+  jsonError?: Error
+}
 
 export type OutputOk = { json: JSON }
 export type OutputError = { error: Error | JSONQueryError }

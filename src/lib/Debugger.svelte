@@ -5,8 +5,7 @@
   let { error, onClose } = $props<{ error: JSONQueryError; onClose: () => void }>()
 
   let refDebugger = $state<HTMLDialogElement>()
-  let errorIndex = $state(0)
-
+  let errorIndex = $state(error.jsonquery.length - 1)
   let current = $derived(error.jsonquery[errorIndex])
 
   onMount(() => {

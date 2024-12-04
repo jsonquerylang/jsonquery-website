@@ -8,11 +8,8 @@
     JSONQueryError,
     Output,
     OutputError,
-    ProcessedQueryText,
-    QueryJSONError,
-    QueryJSONFormat,
+    ProcessedQuery,
     QueryText,
-    QueryTextError,
     QueryTextFormat
   } from '$lib/types'
   import QuickReference from '$lib/QuickReference.svelte'
@@ -25,70 +22,57 @@
   }
 
   let input = $state(props.input)
-
   let queryTab: 'text' | 'json' = $state('text')
-
-  let query: QueryText = $state({
-    textFormat: props.query
-  })
-
-  let processedQuery: ProcessedQueryText = $derived(processQuery(query))
-
-  let output = $derived(go(input, processedQuery))
-
+  let query: QueryText = $state({ textFormat: props.query })
   let debugError: JSONQueryError | null = $state(null)
 
-  function processQuery(query: QueryText): ProcessedQueryText {
-    // FIXME: simplify process query
+  let processedQuery: ProcessedQuery = $derived(processQuery(query))
+  let output = $derived(go(input, processedQuery))
+
+  function processQuery(query: QueryText): ProcessedQuery {
     if (isTextFormat(query)) {
+      const { textFormat } = query
+
       try {
-        const queryJson = parse(query.textFormat)
-        return {
-          textFormat: query.textFormat,
-          jsonFormat: stringifyJson(queryJson),
-          queryJson
-        }
+        const queryJson = parse(textFormat)
+        const jsonFormat = stringifyJson(queryJson)
+
+        return { textFormat, jsonFormat, queryJson }
       } catch (err) {
-        return {
-          textFormat: query.textFormat,
-          jsonError: err as Error
-        }
+        return { textFormat, jsonError: err as Error }
       }
     } else {
+      const { jsonFormat } = query
+
       try {
-        const queryJson = JSON.parse(query.jsonFormat)
-        return {
-          jsonFormat: query.jsonFormat,
-          textFormat: stringify(queryJson),
-          queryJson
-        }
+        const queryJson = JSON.parse(jsonFormat)
+        const textFormat = stringify(queryJson)
+
+        return { jsonFormat, textFormat, queryJson }
       } catch (err) {
-        return {
-          jsonFormat: query.jsonFormat,
-          textError: err as Error
-        }
+        return { jsonFormat, textError: err as Error }
       }
     }
   }
 
-  function go(inputText: string, query: ProcessedQueryText): Output {
-    if (isTextError(query)) {
-      return {
-        error: query.textError
-      }
+  function go(inputText: string, parsedQuery: ProcessedQuery): Output {
+    if (parsedQuery.textError) {
+      return { error: parsedQuery.textError }
     }
 
-    if (isJSONError(query)) {
-      return {
-        error: query.jsonError
-      }
+    if (parsedQuery.jsonError) {
+      return { error: parsedQuery.jsonError }
+    }
+
+    if (!parsedQuery.queryJson) {
+      return { error: new Error('Query is missing') }
     }
 
     try {
       const input = JSON.parse(inputText)
 
       return {
-        json: jsonquery(input, query.queryJson) as JSON
+        json: jsonquery(input, parsedQuery.queryJson) as JSON
       }
     } catch (err) {
       console.error(err)
@@ -113,18 +97,6 @@
 
   function isTextFormat(query: QueryText): query is QueryTextFormat {
     return query && 'textFormat' in query
-  }
-
-  function isTextError(query: unknown): query is QueryTextError {
-    return !!query && 'textError' in (query as Record<string, unknown>)
-  }
-
-  function isJSONFormat(query: QueryText): query is QueryJSONFormat {
-    return query && 'jsonFormat' in query
-  }
-
-  function isJSONError(query: unknown): query is QueryJSONError {
-    return !!query && 'jsonError' in (query as Record<string, unknown>)
   }
 
   function isOutputError(output: Output): output is OutputError {
@@ -201,9 +173,7 @@
             spellcheck="false"
             class:selected={queryTab === 'text'}
             oninput={handleChangeTextQuery}
-            >{isTextFormat(processedQuery)
-              ? processedQuery.textFormat
-              : processedQuery.textError}</textarea
+            >{processedQuery.textFormat ?? processedQuery.textError}</textarea
           >
           <textarea
             id="query-json"
@@ -212,9 +182,7 @@
             spellcheck="false"
             class:selected={queryTab === 'json'}
             oninput={handleChangeJSONQuery}
-            >{isJSONFormat(processedQuery)
-              ? processedQuery.jsonFormat
-              : processedQuery.jsonError}</textarea
+            >{processedQuery.jsonFormat ?? processedQuery.jsonError}</textarea
           >
         </div>
       </div>

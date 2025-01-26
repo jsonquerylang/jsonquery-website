@@ -4,7 +4,7 @@
   import { loadLocalStorage, saveLocalStorage } from '$lib/runes/localStorageState.svelte'
   import type { QueryText } from '$lib/types'
   import { compile, jsonquery, parse, stringify } from '@jsonquerylang/jsonquery'
-  import { examples } from '$lib/data/examples'
+  import { examples, type Example } from '$lib/data/examples'
 
   if (typeof window !== 'undefined') {
     // @ts-ignore
@@ -15,6 +15,7 @@
   const keyQuery = 'playground-query'
   const keyQueryTab = 'playground-query-tab'
 
+  let name = $state(examples[0].name)
   let input = $state(loadLocalStorage(keyInput, examples[0].input))
   let queryTab: 'text' | 'json' = $state(loadLocalStorage(keyQueryTab, 'text'))
   let query: QueryText = $state(loadLocalStorage(keyQuery, { textFormat: examples[0].query }))
@@ -23,9 +24,14 @@
   $effect(() => saveLocalStorage(keyQuery, query))
   $effect(() => saveLocalStorage(keyQueryTab, queryTab))
 
-  function loadExample(example: { input: string; query: string }) {
+  function loadExample(example: Example) {
     input = example.input
     query = { textFormat: example.query }
+    name = example.name
+  }
+
+  function isActive(example: Example) {
+    return name === example.name ? 'active' : ''
   }
 </script>
 
@@ -56,7 +62,9 @@
   <div class="examples">
     <div class="examples-inner">
       {#each examples as example}
-        <Button class="example" onclick={() => loadExample(example)}>{example.name}</Button>
+        <Button class="example {isActive(example)} " onclick={() => loadExample(example)}
+          >{example.name}</Button
+        >
       {/each}
     </div>
   </div>

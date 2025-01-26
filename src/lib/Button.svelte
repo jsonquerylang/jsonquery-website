@@ -20,4 +20,8 @@
   button:hover {
     background: #9c9c9c;
   }
+
+  button.active {
+    background: var(--color);
+  }
 </style>

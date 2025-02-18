@@ -60,7 +60,7 @@
     "name": "Operator",
     "syntax": "(left operator right)",
     "description": "JSON Query supports all basic <b>operators</b>. When composing multiple operators,\n                  it is necessary to use parentheses. Operators do not have precedence since\n                  parentheses are required.",
-    "examples": [".age >= 18)", "(.age >= 18) and (.age <= 65))"],
+    "examples": ["(.age >= 18)", "(.age >= 18) and (.age <= 65))"],
     "documentation": { "title": "Operators", "urlAnchor": "operators" },
     "references": [
       { "title": "equal", "urlAnchor": "eq-", "syntax": "a == b" },

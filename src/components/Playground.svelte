@@ -1,123 +1,128 @@
 <script lang="ts">
-  import Button from './Button.svelte'
-  import { jsonquery, type JSONQuery, parse, stringify } from '@jsonquerylang/jsonquery'
-  import Debugger from './Debugger.svelte'
-  import type {
-    JSON,
-    JSONQueryError,
-    Output,
-    OutputError,
-    ProcessedQuery,
-    QueryText,
-    QueryTextFormat
-  } from './types'
-  import QuickReference from './QuickReference.svelte'
-  import { stringifyJson } from './stringifyJson'
+import { type JSONQuery, jsonquery, parse, stringify } from '@jsonquerylang/jsonquery'
+import Button from './Button.svelte'
+import Debugger from './Debugger.svelte'
+import QuickReference from './QuickReference.svelte'
+import { stringifyJson } from './stringifyJson'
+import type {
+  JSONQueryError,
+  JSONType,
+  Output,
+  OutputError,
+  ProcessedQuery,
+  QueryText,
+  QueryTextFormat
+} from './types'
 
-  let {
-    input = $bindable('input'),
-    query = $bindable('query'),
-    queryTab = $bindable('queryTab')
-  } = $props<{
-    input: string
-    query: QueryText
-    queryTab: 'text' | 'json'
-  }>()
+let {
+  input = $bindable('input'),
+  query = $bindable('query'),
+  queryTab = $bindable('queryTab')
+} = $props<{
+  input: string
+  query: QueryText
+  queryTab: 'text' | 'json'
+}>()
 
-  let debugError: JSONQueryError | null = $state(null)
-  let processedQuery: ProcessedQuery = $derived(processQuery(query))
-  let output = $derived(go(input, processedQuery))
+let debugError: JSONQueryError | null = $state(null)
+const processedQuery: ProcessedQuery = $derived(processQuery(query))
+const output = $derived(go(input, processedQuery))
 
-  function processQuery(query: QueryText): ProcessedQuery {
-    if (isTextFormat(query)) {
-      const { textFormat } = query
-
-      try {
-        const queryJson = parse(textFormat)
-        const jsonFormat = stringifyJson(queryJson)
-
-        return { textFormat, jsonFormat, queryJson }
-      } catch (err) {
-        return { textFormat, jsonError: err as Error }
-      }
-    } else {
-      const { jsonFormat } = query
-
-      try {
-        const queryJson = JSON.parse(jsonFormat)
-        const textFormat = stringify(queryJson)
-
-        return { jsonFormat, textFormat, queryJson }
-      } catch (err) {
-        return { jsonFormat, textError: err as Error }
-      }
-    }
-  }
-
-  function go(inputText: string, parsedQuery: ProcessedQuery): Output {
-    if (parsedQuery.textError) {
-      return { error: parsedQuery.textError }
-    }
-
-    if (parsedQuery.jsonError) {
-      return { error: parsedQuery.jsonError }
-    }
-
-    if (!parsedQuery.queryJson) {
-      return { error: new Error('Query is missing') }
-    }
+function processQuery(query: QueryText): ProcessedQuery {
+  if (isTextFormat(query)) {
+    const { textFormat } = query
 
     try {
-      const input = JSON.parse(inputText)
+      const queryJson = parse(textFormat)
+      const jsonFormat = stringifyJson(queryJson)
 
-      return {
-        json: jsonquery(input, parsedQuery.queryJson) as JSON
-      }
+      return { textFormat, jsonFormat, queryJson }
     } catch (err) {
-      console.error(err)
-      return {
-        error: err as Error
-      }
+      return { textFormat, jsonError: err as Error }
+    }
+  } else {
+    const { jsonFormat } = query
+
+    try {
+      const queryJson = JSON.parse(jsonFormat)
+      const textFormat = stringify(queryJson)
+
+      return { jsonFormat, textFormat, queryJson }
+    } catch (err) {
+      return { jsonFormat, textError: err as Error }
     }
   }
+}
 
-  function isTextFormat(query: QueryText): query is QueryTextFormat {
-    return query && 'textFormat' in query
+function go(inputText: string, parsedQuery: ProcessedQuery): Output {
+  if (parsedQuery.textError) {
+    return { error: parsedQuery.textError }
   }
 
-  function isOutputError(output: Output): output is OutputError {
-    return output && 'error' in output
+  if (parsedQuery.jsonError) {
+    return { error: parsedQuery.jsonError }
   }
 
-  function isJSONQueryError(error: Error): error is JSONQueryError {
-    return error && 'jsonquery' in error
+  if (!parsedQuery.queryJson) {
+    return { error: new Error('Query is missing') }
   }
 
-  function handleChangeTextQuery(
-    event: Event & { currentTarget: EventTarget & HTMLTextAreaElement }
-  ) {
-    query = {
-      textFormat: event.currentTarget?.value
+  try {
+    const input = JSON.parse(inputText)
+
+    return {
+      json: jsonquery(input, parsedQuery.queryJson) as JSONType
+    }
+  } catch (err) {
+    console.error(err)
+    return {
+      error: err as Error
     }
   }
+}
 
-  function handleChangeJSONQuery(
-    event: Event & { currentTarget: EventTarget & HTMLTextAreaElement }
-  ) {
-    query = {
-      jsonFormat: event.currentTarget?.value
-    }
+function isTextFormat(query: QueryText): query is QueryTextFormat {
+  return query && 'textFormat' in query
+}
+
+function isOutputError(output: Output): output is OutputError {
+  return output && 'error' in output
+}
+
+function isJSONQueryError(error: Error): error is JSONQueryError {
+  return error && 'jsonquery' in error
+}
+
+function handleChangeTextQuery(
+  event: Event & { currentTarget: EventTarget & HTMLTextAreaElement }
+) {
+  query = {
+    textFormat: event.currentTarget?.value
+  }
+}
+
+function handleChangeJSONQuery(
+  event: Event & { currentTarget: EventTarget & HTMLTextAreaElement }
+) {
+  query = {
+    jsonFormat: event.currentTarget?.value
+  }
+}
+
+function handleDebug(error: Error | JSONQueryError) {
+  debugError = isJSONQueryError(error) ? error : null
+  console.log('click!', debugError)
+}
+
+function stringifyError(error: Error | JSONQueryError): string {
+  const errorStack: { query: JSONQuery }[] | null = 'jsonquery' in error ? error.jsonquery : null
+  if (errorStack) {
+    const lastQuery = errorStack[errorStack.length - 1].query
+    return `${error}\n\nWhilst executing the following part of the query:\n\n${JSON.stringify(lastQuery)}`
   }
 
-  function stringifyError(error: Error | JSONQueryError): string {
-    const errorStack: { query: JSONQuery }[] | null = 'jsonquery' in error ? error.jsonquery : null
-    if (errorStack) {
-      const lastQuery = errorStack[errorStack.length - 1].query
-      return `${error}\n\nWhilst executing the following part of the query:\n\n${JSON.stringify(lastQuery)}`
-    } else {
-      return String(error)
-    }
-  }
+  return String(error)
+}
 </script>
 
 <div class="playground">
@@ -181,10 +186,7 @@
       {#if isJSONQueryError(error)}
         <Button
           type="button"
-          onclick={() => {
-            debugError = isJSONQueryError(error) ? error : null
-            console.log('click!', debugError)
-          }}>Debug</Button
+          onclick={() => handleDebug(error)}>Debug</Button
         >
       {/if}
       <textarea id="output-text" readonly class="error">{stringifyError(output.error)}</textarea>

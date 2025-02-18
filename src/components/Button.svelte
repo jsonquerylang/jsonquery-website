@@ -1,5 +1,5 @@
 <script lang="ts">
-  let props = $props()
+const props = $props()
 </script>
 
 <button {...props}>{@render props.children?.()}</button>

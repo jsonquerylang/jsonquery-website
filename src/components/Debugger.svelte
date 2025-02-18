@@ -1,41 +1,42 @@
 <script lang="ts">
-  import type { JSONQueryError } from './types'
-  import { onMount } from 'svelte'
-  import { stringifyJson } from './stringifyJson'
+import { onMount } from 'svelte'
+import { stringifyJson } from './stringifyJson'
+import type { JSONQueryError } from './types'
 
-  let { error, onClose } = $props<{ error: JSONQueryError; onClose: () => void }>()
+const { error, onClose } = $props<{ error: JSONQueryError; onClose: () => void }>()
 
-  let refDebugger = $state<HTMLDialogElement>()
-  let errorIndex = $state(error.jsonquery.length - 1)
-  let current = $derived(error.jsonquery[errorIndex])
+// biome-ignore lint/style/useConst: must be let, not const
+let refDebugger = $state<HTMLDialogElement>()
+let errorIndex = $state(error.jsonquery.length - 1)
+const current = $derived(error.jsonquery[errorIndex])
 
-  onMount(() => {
-    refDebugger?.showModal()
-    refDebugger?.addEventListener('close', close)
-    refDebugger?.addEventListener('click', closeWhenClickingOutside)
-  })
+onMount(() => {
+  refDebugger?.showModal()
+  refDebugger?.addEventListener('close', close)
+  refDebugger?.addEventListener('click', closeWhenClickingOutside)
+})
 
-  function close() {
-    onClose()
+function close() {
+  onClose()
+}
+
+function closeWhenClickingOutside(event: Event) {
+  if (event.target === refDebugger) {
+    close()
   }
+}
 
-  function closeWhenClickingOutside(event: Event) {
-    if (event.target === refDebugger) {
-      close()
-    }
+function prev() {
+  if (errorIndex > 0) {
+    errorIndex--
   }
+}
 
-  function prev() {
-    if (errorIndex > 0) {
-      errorIndex--
-    }
+function next() {
+  if (errorIndex < error?.jsonquery?.length - 1) {
+    errorIndex++
   }
-
-  function next() {
-    if (errorIndex < error?.jsonquery?.length - 1) {
-      errorIndex++
-    }
-  }
+}
 </script>
 
 <dialog bind:this={refDebugger}>

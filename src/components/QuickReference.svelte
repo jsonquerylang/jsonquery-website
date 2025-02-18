@@ -1,9 +1,9 @@
 <script lang="ts">
-  import categories from './data/reference.json'
+import categories from './data/reference.json'
 
-  const docsBaseUrl = 'https://github.com/jsonquerylang/jsonquery'
-  const referenceBaseUrl =
-    'https://github.com/jsonquerylang/jsonquery/blob/main/reference/functions.md'
+const docsBaseUrl = 'https://github.com/jsonquerylang/jsonquery'
+const referenceBaseUrl =
+  'https://github.com/jsonquerylang/jsonquery/blob/main/reference/functions.md'
 </script>
 
 {#each categories as category}

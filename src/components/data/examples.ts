@@ -68,6 +68,6 @@ export const examples: Example[] = [
   { "name": "milk", "price": 1.2, "quantity": 3 }
 ]
 `,
-    query: `map(.price * .quantity) | sum()\n`
+    query: 'map(.price * .quantity) | sum()\n'
   }
 ]

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { JSONQueryError } from '$lib/types'
+  import type { JSONQueryError } from './types'
   import { onMount } from 'svelte'
-  import { stringifyJson } from '$lib/stringifyJson'
+  import { stringifyJson } from './stringifyJson'
 
   let { error, onClose } = $props<{ error: JSONQueryError; onClose: () => void }>()
 

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import Button from '$lib/Button.svelte'
+  import Button from './Button.svelte'
   import { jsonquery, type JSONQuery, parse, stringify } from '@jsonquerylang/jsonquery'
-  import Debugger from '$lib/Debugger.svelte'
+  import Debugger from './Debugger.svelte'
   import type {
     JSON,
     JSONQueryError,
@@ -10,9 +10,9 @@
     ProcessedQuery,
     QueryText,
     QueryTextFormat
-  } from '$lib/types'
-  import QuickReference from '$lib/QuickReference.svelte'
-  import { stringifyJson } from '$lib/stringifyJson'
+  } from './types'
+  import QuickReference from './QuickReference.svelte'
+  import { stringifyJson } from './stringifyJson'
 
   let {
     input = $bindable('input'),
@@ -289,7 +289,7 @@
       textarea:not(.selected) {
         display: none;
 
-        /*TODO: only hide the textarea so the history (undo/redo) is remembered */
+        /*TODO: hide the textarea instead of removing it, so the history (undo/redo) is remembered */
         /*flex: none;*/
         /*visibility: hidden;*/
         /*width: 0;*/

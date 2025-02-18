@@ -1,0 +1,27 @@
+---
+import { Content as Functions } from '../components/Functions.md'
+import Layout from '../layouts/Layout.astro'
+---
+
+<Layout>
+  <div class="reference">
+    <Functions />
+  </div>
+</Layout>
+
+<style>
+  .reference {
+    align-self: center;
+    padding: 10px 10px 20px;
+    margin: 0;
+    width: 1020px; /* 1000 + 2 * padding */
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  :global(pre.astro-code) {
+    padding: 5px;
+    border-radius: 3px;
+      line-height: 1.4em;
+  }
+</style>

@@ -57,7 +57,10 @@ import frog200 from '../assets/frog-756900-200.png'
 		--font-family-mono: consolas, menlo, monaco, 'Ubuntu Mono', 'source-code-pro', monospace;
 		--font-size-mono: 13px;
 		--background-color: #fafafa;
-		--color: #222b00;
+		--color: #4d4d4d;
+		--header-text-color: #222b00;
+		--link-color: #37a4b9;
+		--link-color-highlight: #3fbdd6;
 		--error-color: #f65252;
 		--padding: 10px;
 		--border-radius: 3px;
@@ -77,14 +80,7 @@ import frog200 from '../assets/frog-756900-200.png'
 		display: flex;
 		justify-content: center;
 		font-family: ubuntu, arial, sans-serif;
-		color: #4d4d4d;
-	}
-
-	a {
-		color: #37a4b9;
-	}
-	a:hover {
-		color: #3fbdd6;
+		color: var(--color);
 	}
 
 	.app {
@@ -93,6 +89,7 @@ import frog200 from '../assets/frog-756900-200.png'
 		display: flex;
 		flex-direction: column;
 		overflow: auto;
+		scroll-behavior: smooth;
 		background: var(--background-color);
 	}
 
@@ -101,7 +98,7 @@ import frog200 from '../assets/frog-756900-200.png'
 		flex-direction: column;
 		margin: 0;
 		padding: 0 10px 20px;
-		color: var(--color);
+		color: var(--header-text-color);
 		background: var(--theme-color);
 		border-style: solid;
 		border-color: transparent;
@@ -134,28 +131,43 @@ import frog200 from '../assets/frog-756900-200.png'
 		margin-top: 20px;
 	}
 
-	h1 {
+	.header h1 {
 		font-size: 150%;
 		margin: 0;
 		padding: 0;
 	}
 
-	.examples {
-		padding: 0 10px;
-		display: flex;
-		flex-direction: column;
+	:global(a) {
+		color: var(--link-color);
 	}
 
-	.examples-inner {
-		align-self: center;
+	:global(a:hover) {
+		color: var(--link-color-highlight);
+	}
 
-		width: 100%;
-		max-width: 1000px;
-		margin: 30px 0 10px;
+	:global(h1),
+	:global(h2) {
+		margin-top: 2em;
+		scroll-margin-top: 1em;
+	}
 
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
-		gap: 5px;
+	:global(h1 a),
+	:global(h2 a) {
+		color: var(--color);
+		text-decoration: none;
+		position: relative;
+	}
+
+	:global(h1 a:hover),
+	:global(h2 a:hover) {
+		text-decoration: underline;
+	}
+
+	:global(h1 a:hover:before),
+	:global(h2 a:hover:before) {
+		position: absolute;
+		top: 0;
+		left: -1em;
+		content: '# ';
 	}
 </style>

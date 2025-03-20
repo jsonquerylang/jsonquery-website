@@ -1,8 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro'
+
+interface Props {
+  title: string
+  description: string
+}
+
+const title = Astro.props.title
+const description = Astro.props.description
 ---
 
-<Layout>
+<Layout title={title} description={description}>
   <div class="wrapper">
     <div class="outline">
       <!-- TODO: outline -->

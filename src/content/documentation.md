@@ -2,7 +2,7 @@
 
 JSON Query is a small, flexible, and expandable query language. It comes with a human friendly [Text Format](#text-format) and an easy to parse, intermediate [JSON Format](#json-format).
 
-![JSON Query Overview](/jsonquery-overview.svg)
+![JSON Query Overview](../images/jsonquery-overview.svg)
 
 ## Getting started
 

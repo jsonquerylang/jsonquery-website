@@ -230,7 +230,23 @@ JSON Query supports the following primitive values, the same as in [JSON](https:
 
 ## JSON Format
 
-The Text Format describe above can be converted into an intermediate JSON Format consisting purely of composed function calls and vice versa. A function call is described as a [JSON](https://www.json.org) array containing the function name followed by its arguments, like `[name, arg1, arg2, ...]`. The following table gives an overview of the Text Format and the equivalent JSON Format.
+The Text Format described above can be converted into an intermediate JSON Format consisting purely of composed function calls and vice versa. A function call is described as a [JSON](https://www.json.org) array containing the function name followed by its arguments:
+
+```text
+[name, arg1, arg2, ...]
+```
+
+For example, the following JSON Query filters a list with objects on having a property `age > 18`, and next, sorts the objects by the property `age`.
+
+```json
+[
+  "pipe",
+  ["filter", ["gte", ["get", "age"], 18]],
+  ["sort", ["get", "age"]]
+]
+```
+
+The following table gives an overview of the Text Format and the equivalent JSON Format.
 
 | Type     | Text Format                                  | JSON Format                                                               |
 |----------|----------------------------------------------|---------------------------------------------------------------------------|

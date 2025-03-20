@@ -1,18 +1,22 @@
 ---
-const pathname = new URL(Astro.request.url).pathname
-const currentPath = pathname.slice(1) // remove the first "/"
+const currentPath = new URL(Astro.request.url).pathname
 
 const pages = [
-  { path: '', text: 'Playground' },
-  { path: 'docs', text: 'Documentation' },
-  { path: 'reference', text: 'Function reference' },
-  { path: 'implementations', text: 'Implementations' }
+  { path: '/', text: 'Playground' },
+  { path: '/docs', text: 'Documentation' },
+  { path: '/reference', text: 'Function reference' },
+  { path: '/implementations', text: 'Implementations' }
 ]
+
+function isCurrentPath(path: string) {
+  // match for example both "/docs" and "/docs/"
+  return path === currentPath || `${path}/` === currentPath
+}
 ---
 
 <div class="menu">
   {pages.map(({path, text}) =>
-    <a href={`/${path}`} class={path === currentPath ? 'active' : ''}>{text}</a>
+    <a href={path} class={isCurrentPath(path) ? 'active' : ''}>{text}</a>
   )}
 </div>
 

@@ -17,6 +17,7 @@ export default defineConfig({
       // theme: 'aurora-x'
       // theme: 'dracula-soft'
       // theme: 'github-dark-dimmed'
+      // theme: 'catppuccin-latte'
       theme: 'material-theme'
     }
   }

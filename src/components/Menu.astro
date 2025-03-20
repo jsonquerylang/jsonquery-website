@@ -3,9 +3,9 @@ const currentPath = new URL(Astro.request.url).pathname
 
 const pages = [
   { path: '/', text: 'Playground' },
-  { path: '/docs', text: 'Documentation' },
-  { path: '/reference', text: 'Function reference' },
-  { path: '/implementations', text: 'Implementations' }
+  { path: '/docs/', text: 'Documentation' },
+  { path: '/reference/', text: 'Function reference' },
+  { path: '/implementations/', text: 'Implementations' }
 ]
 
 function isCurrentPath(path: string) {

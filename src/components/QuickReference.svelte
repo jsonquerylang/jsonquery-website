@@ -1,8 +1,8 @@
 <script lang="ts">
 import categories from './data/reference.json'
 
-const docsBaseUrl = '/docs'
-const referenceBaseUrl = '/reference'
+const docsBaseUrl = '/docs/'
+const referenceBaseUrl = '/reference/'
 </script>
 
 {#each categories as category}

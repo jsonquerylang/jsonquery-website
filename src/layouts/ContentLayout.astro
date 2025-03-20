@@ -1,22 +1,24 @@
 ---
+import type { MarkdownHeading } from '@astrojs/markdown-remark'
+import Outline from '../components/Outline.astro'
 import Layout from '../layouts/Layout.astro'
 
 interface Props {
   title: string
   description: string
+  headings: MarkdownHeading[]
 }
 
-const title = Astro.props.title
-const description = Astro.props.description
+const { title, description, headings } = Astro.props
 ---
 
 <Layout title={title} description={description}>
   <div class="wrapper">
-    <div class="outline">
-      <!-- TODO: outline -->
-    </div>
-    <div class="content">
+   <div class="content">
       <slot />
+    </div>
+    <div class="outline">
+      <Outline headings={headings} />
     </div>
   </div>
 </Layout>
@@ -32,10 +34,12 @@ const description = Astro.props.description
 
     display: flex;
     flex-direction: row;
+    gap: calc(4 * var(--padding));
   }
 
   .outline {
-    width: 200px;
+    margin-top: 5em;
+    width: 160px;
   }
 
   .content {

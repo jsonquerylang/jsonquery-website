@@ -1,0 +1,58 @@
+---
+import type { MarkdownHeading } from '@astrojs/markdown-remark'
+
+interface Props {
+  headings: MarkdownHeading[]
+}
+
+const headings = Astro.props.headings
+---
+
+<div class="outline">
+  <h3>
+    Outline
+  </h3>
+  <ul>
+    {headings
+      .filter(heading => heading.depth > 1)
+      .map(({ depth, slug, text}) => <li style={`margin-left: ${2 * (depth - 2)}em`}>
+        <a href={`#${slug}`}>{text}</a>
+      </li>)}
+  </ul>
+</div>
+
+<style>
+  .outline {
+    background: var(--outline-background);
+    border-radius: var(--outline-border-radius);
+    padding: var(--padding);
+    display: flex;
+    flex-direction: column;
+    gap: calc(2 * var(--padding));
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding-left: 0;
+  }
+
+  li {
+    line-height: 1.6em;
+  }
+
+  h3 {
+    margin: 0;
+    padding: 0;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  a:active,
+  a:hover {
+    text-decoration: underline;
+    color: var(--link-color);
+  }
+</style>

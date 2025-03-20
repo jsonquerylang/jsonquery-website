@@ -6,8 +6,7 @@ interface Props {
   description: string
 }
 
-const title = Astro.props.title
-const description = Astro.props.description
+const { title, description } = Astro.props
 ---
 
 <!doctype html>
@@ -52,6 +51,8 @@ const description = Astro.props.description
 		--table-cell-border: 1px solid #e5e5e5;
 		--table-cell-padding: 5px 10px;
 		--code-background: #f0f0f0;
+		--outline-background: #f5f5f5;
+		--outline-border-radius: 10px;
   }
 
   html,

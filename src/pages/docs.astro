@@ -1,11 +1,12 @@
 ---
-import { Content } from '../content/documentation.md'
+import { Content, getHeadings } from '../content/documentation.md'
 import ContentLayout from '../layouts/ContentLayout.astro'
 ---
 
 <ContentLayout
- title="Documentation • JSON Query"
- description="Documentation page of JSON Query explaining the syntax of the Text Format and JSON Format"
+  title="Documentation • JSON Query"
+  description="Documentation page of JSON Query explaining the syntax of the Text Format and JSON Format"
+  headings={getHeadings()}
 >
   <Content />
 </ContentLayout>

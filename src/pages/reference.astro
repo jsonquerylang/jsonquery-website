@@ -1,10 +1,12 @@
 ---
-import { Content } from '../content/reference.md'
+import { Content, getHeadings } from '../content/reference.md'
 import ContentLayout from '../layouts/ContentLayout.astro'
 ---
 
 <ContentLayout
-    title="Function reference • JSON Query"
-    description="A function reference listing all available JSON Query functions and operators">
+  title="Function reference • JSON Query"
+  description="A function reference listing all available JSON Query functions and operators"
+  headings={getHeadings()}
+>
   <Content />
 </ContentLayout>

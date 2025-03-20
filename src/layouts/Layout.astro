@@ -96,6 +96,11 @@ const { title, description } = Astro.props
 		scroll-margin-top: 1em;
   }
 
+
+	:global(h1:first-child) {
+		margin-top: 0;
+	}
+
   :global(h1 a),
   :global(h2 a),
   :global(h3 a) {

@@ -13,7 +13,7 @@ const { title, description, headings } = Astro.props
 ---
 
 <Layout title={title} description={description}>
-  <div class="wrapper">
+  <div class="content-wrapper">
    <div class="content">
       <slot />
     </div>
@@ -24,10 +24,10 @@ const { title, description, headings } = Astro.props
 </Layout>
 
 <style>
-  .wrapper {
+  .content-wrapper {
     align-self: center;
     padding: 10px 10px 20px;
-    margin: 0;
+    margin: 5em 0 0;
     width: 1020px; /* 1000 + 2 * padding */
     max-width: 100%;
     box-sizing: border-box;
@@ -38,7 +38,6 @@ const { title, description, headings } = Astro.props
   }
 
   .outline {
-    margin-top: 5em;
     width: 160px;
   }
 
@@ -46,8 +45,29 @@ const { title, description, headings } = Astro.props
     flex: 1;
   }
 
+
+  @media (max-width: 1020px) {
+    .content-wrapper {
+      flex-direction: column-reverse;
+      margin: 2em 0 0;
+    }
+
+    .outline {
+      max-height: 200px;
+      overflow: auto;
+    }
+  }
+
+
+  @media (max-width: 400px) {
+    .outline {
+      width: unset;
+    }
+  }
+
   :global(p) {
     line-height: 1.5em;
+    overflow: auto;
   }
 
   :global(pre.astro-code) {

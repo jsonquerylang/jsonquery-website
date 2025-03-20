@@ -1,0 +1,63 @@
+---
+import Layout from '../layouts/Layout.astro'
+---
+
+<Layout>
+  <div class="wrapper">
+    <div class="outline">
+      <!-- TODO: outline -->
+    </div>
+    <div class="content">
+      <slot />
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .wrapper {
+    align-self: center;
+    padding: 10px 10px 20px;
+    margin: 0;
+    width: 1020px; /* 1000 + 2 * padding */
+    max-width: 100%;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: row;
+  }
+
+  .outline {
+    width: 300px;
+  }
+
+  .content {
+    flex: 1;
+  }
+
+  :global(p) {
+    line-height: 1.5em;
+  }
+
+  :global(pre.astro-code) {
+    padding: 5px;
+    border-radius: 3px;
+    line-height: 1.4em;
+  }
+
+  :global(table code),
+  :global(p code) {
+    background: var(--code-background);
+    padding: 2px 5px;
+    border-radius: var(--border-radius);
+    display: inline-block;
+  }
+
+  :global(table) {
+    border-collapse: collapse;
+  }
+  :global(table th),
+  :global(table td) {
+    border: var(--table-cell-border);
+    padding: var(--table-cell-padding);
+  }
+</style>

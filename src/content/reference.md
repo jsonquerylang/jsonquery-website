@@ -1,4 +1,4 @@
-# Functions
+# Function reference
 
 This reference lists all functions and operators.
 

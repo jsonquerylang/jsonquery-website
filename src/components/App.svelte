@@ -41,7 +41,7 @@ function loadExample(example: { input: string; query: string }) {
 
 <style>
   .examples {
-    padding: 0 10px;
+    padding: 0 var(--padding);
     display: flex;
     flex-direction: column;
   }
@@ -56,6 +56,6 @@ function loadExample(example: { input: string; query: string }) {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    gap: 5px;
+    gap: var(--button-margin);
   }
 </style>

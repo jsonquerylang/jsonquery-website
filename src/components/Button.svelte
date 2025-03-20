@@ -14,7 +14,6 @@ const props = $props()
     cursor: pointer;
     font-family: inherit;
     font-size: inherit;
-    margin: 5px 0;
   }
 
   button:hover {

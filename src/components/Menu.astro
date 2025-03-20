@@ -1,0 +1,52 @@
+---
+const currentPath = new URL(Astro.request.url).pathname
+
+const pages = [
+  { path: '/', text: 'Playground' },
+  { path: '/docs', text: 'Documentation' },
+  { path: '/reference', text: 'Function reference' },
+  { path: '/implementations', text: 'Implementations' }
+]
+
+function isCurrentPath(path: string) {
+  // match for example both "/docs" and "/docs/"
+  return path === currentPath || `${path}/` === currentPath
+}
+---
+
+<div class="menu">
+  {pages.map(({path, text}) =>
+    <a href={path} class={isCurrentPath(path) ? 'active' : ''}>{text}</a>
+  )}
+</div>
+
+<style>
+  .menu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--button-margin);
+    row-gap: var(--button-margin);
+
+    a {
+      display: inline-block;
+      text-decoration: none;
+      background: white;
+      color: var(--link-color);
+      padding: var(--padding) calc(2 * var(--padding));
+      border-radius: var(--border-radius);
+    }
+    a:hover,
+    a:focus {
+      background: var(--link-color-white-highlight);
+    }
+
+    a.active {
+      background: var(--link-color);
+      color: white;
+    }
+    a.active:hover,
+    a.active:focus {
+      background: var(--link-color-highlight);
+    }
+  }
+</style>

@@ -1,0 +1,89 @@
+---
+import Menu from './Menu.astro'
+---
+
+<div class="header">
+  <div class="header-contents">
+    <a href="/">
+    <!-- source: https://pixy.org/756900/ -->
+    <img
+        src="/frog-756900-100.png"
+        srcset="/frog-756900-200.png 2x"
+        alt="JSON Query logo"
+        class="header-icon"
+        width="100"
+        height="98"
+    />
+    </a>
+    <div class="header-text">
+      <h1><a href="/">JSON Query</a></h1>
+      <div>A small, flexible, and expandable JSON query language.</div>
+      <Menu />
+    </div>
+  </div>
+</div>
+
+<style>
+  .header {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0 10px 20px;
+    color: var(--header-text-color);
+    background: var(--theme-color);
+    border-style: solid;
+    border-color: transparent;
+    border-width: 0 0 10px 0;
+    background-color: hsla(0, 0%, 0%, 0);
+    background-image: linear-gradient(var(--theme-color), var(--theme-color)),
+    linear-gradient(to top right, transparent 50.5%, var(--theme-color) 50.5%),
+    linear-gradient(to top left, transparent 50.5%, var(--theme-color) 50.5%);
+    background-repeat: repeat, repeat-x, repeat-x;
+    background-position:
+        0 0,
+        10px 100%,
+        10px 100%;
+    background-size:
+        auto auto,
+        20px 20px,
+        20px 20px;
+    background-clip: padding-box, border-box, border-box;
+    background-origin: padding-box, border-box, border-box;
+  }
+
+  .header-contents {
+    width: 100%;
+    max-width: 1000px;
+    align-self: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+  }
+
+  .header-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--padding);
+  }
+
+  .header h1 {
+    font-size: 150%;
+    margin: 0;
+    padding: 0;
+
+  }
+
+  .header h1 a {
+    color: inherit;
+  }
+
+  .header h1 a:hover {
+    text-decoration: none;
+  }
+
+  .header h1 a:hover:before {
+    content: none;
+  }
+</style>

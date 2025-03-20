@@ -3,6 +3,15 @@ import App from '../components/App.svelte'
 import Layout from '../layouts/Layout.astro'
 ---
 
-<Layout>
-	<App client:load />
+<Layout
+  title="JSON Query - a small, flexible, and expandable JSON query language"
+  description="JSON Query - a small, flexible, and expandable JSON query language"
+>
+  <App client:load />
 </Layout>
+
+<style>
+  :root {
+    --background-color: #fafafa;
+  }
+</style>

@@ -1,12 +1,20 @@
+---
+import Header from '../components/Header.astro'
+
+interface Props {
+  title: string
+  description: string
+}
+
+const { title, description } = Astro.props
+---
+
 <!doctype html>
 <html lang="en">
-	<head>
+  <head>
 		<meta charset="UTF-8" />
-		<title>JSON Query - a small, flexible, and expandable JSON query language</title>
-		<meta
-			name="description"
-			content="JSON Query - a small, flexible, and expandable JSON query language"
-		/>
+		<title>{title}</title>
+		<meta name="description" content={description} />
 		<meta
 			name="keywords"
 			content="json, query, language, lightweight, flexible, expandable, simple"
@@ -14,143 +22,106 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/png" href="/frog-756900-100.png" />
 		<meta name="generator" content={Astro.generator} />
-	</head>
-	<body>
+  </head>
+  <body>
 		<div class="app">
-			<div class="header">
-				<div class="header-contents">
-					<!-- source: https://pixy.org/756900/ -->
-					<img
-						src="/frog-756900-100.png"
-						srcset="/frog-756900-200.png 2x"
-					  alt="JSON Query logo"
-					  class="header-icon"
-						width="100"
-						height="98"
-					/>
-					<div class="header-text">
-						<h1>JSON Query</h1>
-						<p>A small, flexible, and expandable JSON query language.</p>
-						<p>
-							Documentation:
-							<a href="https://github.com/jsonquerylang/jsonquery">
-								https://github.com/jsonquerylang/jsonquery
-							</a>
-						</p>
-					</div>
-				</div>
-			</div>
+			<Header />
 			<slot />
 		</div>
-	</body>
+  </body>
 </html>
 
 <style>
-	:root {
+  :root {
 		--theme-color: #d5f3bb;
 		--theme-color-highlight: #e1f6ce;
 		--font-family-mono: consolas, menlo, monaco, 'Ubuntu Mono', 'source-code-pro', monospace;
 		--font-size-mono: 13px;
-		--background-color: #fafafa;
-		--color: #222b00;
+		--background-color: white;
+		--color: #4d4d4d;
+		--header-text-color: #222b00;
+		--link-color: #3fbdd6;
+		--link-color-highlight: #37a4b9;
+		--link-color-white-highlight: #f5f5f5;
 		--error-color: #f65252;
 		--padding: 10px;
+		--button-margin: 5px;
+		--button-border: 1px solid #bfbfbf;
 		--border-radius: 3px;
 		--tab-border-width: 5px;
-	}
+		--table-cell-border: 1px solid #e5e5e5;
+		--table-cell-padding: 5px 10px;
+		--code-background: #f0f0f0;
+		--outline-background: #f5f5f5;
+		--outline-border-radius: 10px;
+  }
 
-	html,
-	body {
+  html,
+  body {
 		width: 100%;
 		height: 100%;
 		margin: 0;
 		padding: 0;
 		overflow: hidden;
-	}
+  }
 
-	body {
+  body {
 		display: flex;
 		justify-content: center;
 		font-family: ubuntu, arial, sans-serif;
-		color: #4d4d4d;
-	}
+		color: var(--color);
+  }
 
-	a {
-		color: #37a4b9;
-	}
-	a:hover {
-		color: #3fbdd6;
-	}
-
-	.app {
+  .app {
 		flex: 1;
 		padding: 0;
 		display: flex;
 		flex-direction: column;
 		overflow: auto;
+		scroll-behavior: smooth;
 		background: var(--background-color);
+  }
+
+  :global(a) {
+		color: var(--link-color);
+  }
+
+  :global(a:hover) {
+		color: var(--link-color-highlight);
+  }
+
+  :global(h1),
+  :global(h2),
+  :global(h3) {
+		margin-top: 2em;
+		scroll-margin-top: 1em;
+  }
+
+
+	:global(h1:first-child) {
+		margin-top: 0;
 	}
 
-	.header {
-		display: flex;
-		flex-direction: column;
-		margin: 0;
-		padding: 0 10px 20px;
+  :global(h1 a),
+  :global(h2 a),
+  :global(h3 a) {
 		color: var(--color);
-		background: var(--theme-color);
-		border-style: solid;
-		border-color: transparent;
-		border-width: 0 0 10px 0;
-		background-color: hsla(0, 0%, 0%, 0);
-		background-image: linear-gradient(var(--theme-color), var(--theme-color)),
-		linear-gradient(to top right, transparent 50.5%, var(--theme-color) 50.5%),
-		linear-gradient(to top left, transparent 50.5%, var(--theme-color) 50.5%);
-		background-repeat: repeat, repeat-x, repeat-x;
-		background-position:
-			0 0,
-			10px 100%,
-			10px 100%;
-		background-size:
-			auto auto,
-			20px 20px,
-			20px 20px;
-		background-clip: padding-box, border-box, border-box;
-		background-origin: padding-box, border-box, border-box;
-	}
+		text-decoration: none;
+		position: relative;
+  }
 
-	.header-contents {
-		width: 100%;
-		max-width: 1000px;
-		align-self: center;
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
-		gap: 20px;
-		margin-top: 20px;
-	}
+  :global(h1 a:hover),
+  :global(h2 a:hover),
+  :global(h3 a:hover) {
+		text-decoration: underline;
+  }
 
-	h1 {
-		font-size: 150%;
-		margin: 0;
-		padding: 0;
-	}
-
-	.examples {
-		padding: 0 10px;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.examples-inner {
-		align-self: center;
-
-		width: 100%;
-		max-width: 1000px;
-		margin: 30px 0 10px;
-
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
-		gap: 5px;
-	}
+  :global(h1 a:hover:before),
+  :global(h2 a:hover:before),
+  :global(h3 a:hover:before) {
+		position: absolute;
+		top: 0;
+		left: -1em;
+		content: '# ';
+  }
 </style>

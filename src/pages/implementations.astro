@@ -1,0 +1,12 @@
+---
+import { Content, getHeadings } from '../content/implementations.md'
+import ContentLayout from '../layouts/ContentLayout.astro'
+---
+
+<ContentLayout
+  title="Implementations • JSON Query"
+  description="An overview of the JSON Query libraries available in various programming languages"
+  headings={getHeadings()}
+>
+  <Content />
+</ContentLayout>

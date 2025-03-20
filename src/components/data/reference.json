@@ -63,20 +63,20 @@
     "examples": ["(.age >= 18)", "(.age >= 18) and (.age <= 65))"],
     "documentation": { "title": "Operators", "urlAnchor": "operators" },
     "references": [
-      { "title": "equal", "urlAnchor": "eq-", "syntax": "a == b" },
-      { "title": "greater than", "urlAnchor": "gt-", "syntax": "a > b" },
+      { "title": "equal", "urlAnchor": "eq", "syntax": "a == b" },
+      { "title": "greater than", "urlAnchor": "gt", "syntax": "a > b" },
       {
         "title": "greater than or equal to",
-        "urlAnchor": "gte-",
+        "urlAnchor": "gte",
         "syntax": "a >= b"
       },
-      { "title": "less than", "urlAnchor": "lt-", "syntax": "a < b" },
+      { "title": "less than", "urlAnchor": "lt", "syntax": "a < b" },
       {
         "title": "less than or equal to",
-        "urlAnchor": "lte-",
+        "urlAnchor": "lte",
         "syntax": "a <= b"
       },
-      { "title": "not equal", "urlAnchor": "ne-", "syntax": "a != b" },
+      { "title": "not equal", "urlAnchor": "ne", "syntax": "a != b" },
       { "title": "and", "urlAnchor": "and", "syntax": "a and b" },
       { "title": "or", "urlAnchor": "or", "syntax": "a or b" },
       {
@@ -89,12 +89,12 @@
         "urlAnchor": "not-in",
         "syntax": "a not in [value1, value2, ...]"
       },
-      { "title": "add", "urlAnchor": "add-", "syntax": "a + b" },
-      { "title": "subtract", "urlAnchor": "subtract-", "syntax": "a - b" },
-      { "title": "multiply", "urlAnchor": "multiply-", "syntax": "a * b" },
-      { "title": "divide", "urlAnchor": "divide-", "syntax": "a / b" },
-      { "title": "power", "urlAnchor": "pow-", "syntax": "a ^ b" },
-      { "title": "remainder", "urlAnchor": "mod-", "syntax": "a % b" }
+      { "title": "add", "urlAnchor": "add", "syntax": "a + b" },
+      { "title": "subtract", "urlAnchor": "subtract", "syntax": "a - b" },
+      { "title": "multiply", "urlAnchor": "multiply", "syntax": "a * b" },
+      { "title": "divide", "urlAnchor": "divide", "syntax": "a / b" },
+      { "title": "power", "urlAnchor": "pow", "syntax": "a ^ b" },
+      { "title": "remainder", "urlAnchor": "mod", "syntax": "a % b" }
     ]
   },
   {

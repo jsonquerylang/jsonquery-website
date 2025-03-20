@@ -90,6 +90,12 @@ pprint(output)
 
 Documentation: [https://github.com/lateapexearlyspeed/Lateapexearlyspeed.JsonSchema](https://github.com/lateapexearlyspeed/Lateapexearlyspeed.JsonSchema?tab=readme-ov-file#jsonquerynet)
 
+Install via NuGet:
+
+```text
+dotnet add package LateApexEarlySpeed.Json.Schema
+```
+
 Usage:
 
 ```dotnet

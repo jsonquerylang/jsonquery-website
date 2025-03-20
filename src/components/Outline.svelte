@@ -46,9 +46,15 @@ const filteredHeadings = $derived(
     background: var(--outline-background);
     border-radius: var(--outline-border-radius);
     padding: var(--padding);
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: calc(2 * var(--padding));
+
+    position: sticky;
+    top: 20px;
+    max-height: min(calc(100vh - 60px), 400px);
+    overflow: auto;
   }
 
   .search {

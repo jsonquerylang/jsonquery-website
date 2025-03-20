@@ -1,25 +1,30 @@
 ---
 import type { MarkdownHeading } from '@astrojs/markdown-remark'
-import Outline from '../components/Outline.astro'
+import Outline from '../components/Outline.svelte'
 import Layout from '../layouts/Layout.astro'
 
 interface Props {
   title: string
   description: string
   headings: MarkdownHeading[]
+  enableSearch?: boolean
 }
 
-const { title, description, headings } = Astro.props
+const { title, description, headings, enableSearch } = Astro.props
 ---
 
 <Layout title={title} description={description}>
   <div class="content-wrapper">
    <div class="content">
       <slot />
-    </div>
-    <div class="outline">
-      <Outline headings={headings} />
-    </div>
+   </div>
+   <div class="outline">
+     {
+       enableSearch
+         ? <Outline client:load headings={headings} enableSearch={enableSearch} />
+         : <Outline headings={headings} />
+     }
+   </div>
   </div>
 </Layout>
 

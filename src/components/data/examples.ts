@@ -69,5 +69,20 @@ export const examples: Example[] = [
 ]
 `,
     query: 'map(.price * .quantity) | sum()\n'
+  },
+  {
+    name: 'example 6',
+    input: `{
+  "Joe": {
+    "2025-01-06 00:00:00": "Day off",
+    "2025-01-14 00:00:00": "Start holiday",
+    "2025-01-18 00:00:00": "End holiday"
+  },
+  "Sarah": {
+    "2025-01-06 00:00:00": "Start holiday",
+    "2025-01-11 00:00:00": "End holiday"
+  }
+}`,
+    query: 'mapValues(mapKeys(substring(get(), 0, 10)))'
   }
 ]

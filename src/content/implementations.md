@@ -107,8 +107,8 @@ JsonNode? result = queryable.Query(jsonData);
 
 Support for JSON Query language can be implemented in new programming languages. Implementing the query engine is most straight forward: this boils down to implementing each of the functions (`sort`, `filter`, `groupBy`, etc.), and creating a compiler which can go through a JSON Query like `["sort", ["get", "name"], "desc"]` look up the function `sort`, and pass the arguments to it. Implementing a parser and stringifier is a bit more work, but the parser and stringifier of for example the JavaScript implementation can be used as a reference.
 
-There is a JSON based Test Suite available that can be used to ensure that your implementation matches the behavior of the reference implementation, see: [Test Suite](https://github.com/jsonquerylang/jsonquery/blob/develop/test-suite/README.md). 
-
 A new implementation can be made for example by porting the [JavaScript implementation](https://github.com/jsonquerylang/jsonquery) to a new programming language.
 
-To get a new implementation listed on this page, please open an issue at the repository of the website: https://github.com/jsonquerylang/jsonquery-website
+There is a JSON based Test Suite available that can be used to ensure that your implementation matches the behavior of the reference implementation, see: [JSON Query Test Suite](https://github.com/jsonquerylang/jsonquery/blob/develop/test-suite/README.md).
+
+To get a new implementation listed on this page, please open an issue at the [website repository](https://github.com/jsonquerylang/jsonquery-website).

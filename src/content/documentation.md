@@ -261,6 +261,18 @@ The following table gives an overview of the Text Format and the equivalent JSON
 | Boolean  | `true` or `false`                            | `true` or `false`                                                         |
 | null     | `null`                                       | `null`                                                                    |
 
+## Gotchas
+
+The JSON Query language has some gotchas. What can be confusing at first is to understand how data is piped through the query. A traditional function call is for example `max(myValues)`, so you may expect to have to write this in JSON Query like `["max", "myValues"]`. However, JSON Query has a functional approach where we create a pipeline like: `data -> max -> result`. So, you will have to write a pipe which first gets this property and next calls the function max: `.myValues | max()`.
+
+Another gotcha is that unlike some other query languages, you need to use the `map` function to pick some properties out of an array _for every item_ in the array. When you're just picking a few fields without renaming them, you can use the function `pick` too, which is more concise.
+
+```
+.friends | { firstName: .name, age: .age }        WRONG 
+.friends | map({ firstName: .name, age: .age })   RIGHT 
+.friends | pick(.name, .age)                      RIGHT 
+```
+
 ## Motivation
 
 There are many powerful query languages out there, so why the need to develop `jsonquery`? There are a couple of reasons for this.

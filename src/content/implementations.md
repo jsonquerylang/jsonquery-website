@@ -110,3 +110,5 @@ Support for JSON Query language can be implemented in new programming languages.
 There is a JSON based Test Suite available that can be used to ensure that your implementation matches the behavior of the reference implementation, see: [Test Suite](https://github.com/jsonquerylang/jsonquery/blob/develop/test-suite/README.md). 
 
 A new implementation can be made for example by porting the [JavaScript implementation](https://github.com/jsonquerylang/jsonquery) to a new programming language.
+
+To get a new implementation listed on this page, please open an issue at the repository of the website: https://github.com/jsonquerylang/jsonquery-website

@@ -22,3 +22,18 @@ export type ProcessedQuery = {
 export type OutputOk = { json: JSONType }
 export type OutputError = { error: Error | JSONQueryError }
 export type Output = OutputOk | OutputError
+
+export interface ReferenceCategory {
+  name: string
+  syntax: string
+  description: string
+  examples: string[]
+  documentation: {
+    title: string
+    urlAnchor: string
+  }
+  references: Array<{
+    urlAnchor: string
+    syntax: string
+  }>
+}

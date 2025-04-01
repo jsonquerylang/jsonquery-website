@@ -1,5 +1,33 @@
 <script lang="ts">
+import type { MarkdownHeading } from '@astrojs/markdown-remark'
+import { getHeadings } from '../content/reference.md'
 import categories from './data/reference.json'
+import type { ReferenceCategory } from './types'
+
+function validateQuickReference(headings: MarkdownHeading[], categories: ReferenceCategory[]) {
+  const documentationAnchors = new Set(
+    headings.filter((heading) => heading.depth === 2).map((heading) => heading.slug)
+  )
+
+  const quickReferenceAnchors = new Set(
+    categories.flatMap((category) => category.references.map((reference) => reference.urlAnchor))
+  )
+
+  const issues = [
+    ...[...documentationAnchors]
+      .filter((anchor) => !quickReferenceAnchors.has(anchor))
+      .map((missingAnchor) => `"${missingAnchor}" is missing in the quick reference`),
+    ...[...quickReferenceAnchors]
+      .filter((anchor) => !documentationAnchors.has(anchor))
+      .map((missingAnchor) => `"${missingAnchor}" found in the quick reference but not in the docs`)
+  ]
+
+  if (issues.length > 0) {
+    throw new Error(`Error: issues found in the QuickReference:\n${issues.join('. \n')}`)
+  }
+}
+
+validateQuickReference(getHeadings(), categories)
 
 const docsBaseUrl = '/docs/'
 const referenceBaseUrl = '/reference/'

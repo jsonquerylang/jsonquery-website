@@ -93,14 +93,44 @@ Documentation: [https://github.com/lateapexearlyspeed/Lateapexearlyspeed.JsonSch
 Install via NuGet:
 
 ```text
-dotnet add package LateApexEarlySpeed.Json.Schema
+dotnet add package JsonQuery.Net
 ```
 
 Usage:
 
-```dotnet
-IJsonQueryable queryable = JsonQueryable.Parse(jsonQuery);
-JsonNode? result = queryable.Query(jsonData);
+```csharp
+using JsonQuery.Net.Queryables;
+
+JsonNode jsonData = JsonNode.Parse("""
+    {
+      "friends": [
+        { "name": "Chris", "age": 23, "city": "New York" },
+        { "name": "Emily", "age": 19, "city": "Atlanta" },
+        { "name": "Joe", "age": 32, "city": "New York" },
+        { "name": "Kevin", "age": 19, "city": "Atlanta" },
+        { "name": "Michelle", "age": 27, "city": "Los Angeles" },
+        { "name": "Robert", "age": 45, "city": "Manhattan" },
+        { "name": "Sarah", "age": 31, "city": "New York" }
+      ]
+    }
+    """)!;
+
+// Get the array containing the friends from the object, filter the friends that live in New York,
+// sort them by age, and pick just the name and age out of the objects.
+IJsonQueryable jsonQueryable = JsonQueryable.Parse("""
+    .friends 
+    | filter(.city == "New York") 
+    | sort(.age) 
+    | pick(.name, .age)
+    """);
+
+JsonNode output = jsonQueryable.Query(jsonData)!;
+
+// output = [
+//   { "name": "Chris", "age": 23 },
+//   { "name": "Sarah", "age": 31 },
+//   { "name": "Joe", "age": 32 }
+// ]
 ```
 
 ## How to implement in a new language

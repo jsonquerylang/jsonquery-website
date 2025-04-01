@@ -1,11 +1,21 @@
 ---
+import { faGithub } from '@fortawesome/free-brands-svg-icons'
+import { faUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
+import Fa from 'svelte-fa'
+
 const currentPath = new URL(Astro.request.url).pathname
 
 const pages = [
   { path: '/', text: 'Playground' },
   { path: '/docs/', text: 'Documentation' },
   { path: '/reference/', text: 'Function reference' },
-  { path: '/implementations/', text: 'Implementations' }
+  { path: '/implementations/', text: 'Implementations' },
+  {
+    path: 'https://github.com/orgs/jsonquerylang/',
+    text: 'Source code',
+    icon: faGithub,
+    externalLink: true
+  }
 ]
 
 function isCurrentPath(path: string) {
@@ -15,8 +25,18 @@ function isCurrentPath(path: string) {
 ---
 
 <div class="menu">
-  {pages.map(({path, text}) =>
-    <a href={path} class={isCurrentPath(path) ? 'active' : ''}>{text}</a>
+  {pages.map(({path, text, icon, externalLink }) =>
+      <a
+          href={path}
+          class={isCurrentPath(path) ? 'active' : ''}
+          target={externalLink ? '_blank' : undefined}
+      >
+        {icon && <Fa icon={icon} />}
+        {text}
+        {externalLink && <span class="external-link">
+          <Fa icon={faUpRightFromSquare} />
+        </span>}
+      </a>
   )}
 </div>
 
@@ -47,6 +67,15 @@ function isCurrentPath(path: string) {
     a.active:hover,
     a.active:focus {
       background: var(--link-color-highlight);
+    }
+
+    a .external-link {
+      visibility: hidden;
+    }
+
+    a:hover .external-link,
+    a:active .external-link {
+      visibility: visible;
     }
   }
 </style>

@@ -12,19 +12,19 @@
     "format": "biome check --write"
   },
   "dependencies": {
-    "@astrojs/markdown-remark": "6.1.0",
-    "@astrojs/svelte": "7.0.4",
+    "@astrojs/markdown-remark": "6.3.1",
+    "@astrojs/svelte": "7.0.9",
     "@fortawesome/free-brands-svg-icons": "6.7.2",
     "@fortawesome/free-solid-svg-icons": "6.7.2",
     "@jsonquerylang/jsonquery": "4.1.1",
-    "astro": "5.3.0",
+    "astro": "5.5.6",
     "fracturedjsonjs": "4.0.2",
     "rehype-autolink-headings": "7.1.0",
-    "svelte": "5.20.1",
+    "svelte": "5.25.6",
     "svelte-fa": "4.0.3"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "typescript": "5.7.3"
+    "typescript": "5.8.2"
   }
 }

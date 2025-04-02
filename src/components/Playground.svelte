@@ -1,7 +1,7 @@
 <script lang="ts">
 import { type JSONQuery, jsonquery, parse, stringify } from '@jsonquerylang/jsonquery'
 import Button from './Button.svelte'
-import Debugger from './Debugger.svelte'
+import DebuggerModal from './DebuggerModal.svelte'
 import QuickReference from './QuickReference.svelte'
 import { stringifyJson } from './stringifyJson'
 import type {
@@ -202,7 +202,7 @@ function stringifyError(error: Error | JSONQueryError): string {
 </div>
 
 {#if debugError}
-  <Debugger error={debugError} onClose={() => (debugError = null)} />
+  <DebuggerModal error={debugError} onClose={() => (debugError = null)} />
 {/if}
 
 <style>
@@ -324,7 +324,7 @@ function stringifyError(error: Error | JSONQueryError): string {
   textarea {
     flex: 1;
     width: 100%;
-    border: 1px solid #bfbfbf;
+    border: var(--input-border);
     border-radius: var(--border-radius);
     padding: 5px;
     box-sizing: border-box;

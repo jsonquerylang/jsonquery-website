@@ -1,12 +1,20 @@
 <script lang="ts">
-import { onDestroy, onMount, type Snippet } from 'svelte'
+import { type IconDefinition, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { type Snippet, onDestroy, onMount } from 'svelte'
+import Fa from 'svelte-fa'
 
 interface Props {
+  title: string
   onClose: () => void
+  actions?: Array<{
+    title: string
+    onclick: () => void
+    icon: IconDefinition
+  }>
   children: Snippet
 }
 
-const { onClose, children }: Props = $props()
+const { title, children, actions = [], onClose }: Props = $props()
 
 // biome-ignore lint/style/useConst: must be let, not const
 let refDialog = $state<HTMLDialogElement>()
@@ -31,6 +39,21 @@ function closeWhenClickingOutside(event: Event) {
 </script>
 
 <dialog bind:this={refDialog}>
+  <div class="header">
+    <div class="title">{title}</div>
+    {#each actions as action}
+      <button
+          type="button"
+          title={action.title}
+          onclick={() => action.onclick()}
+      >
+        <Fa icon={action.icon} size="lg" />
+      </button>
+    {/each}
+    <button type="button" title="Close (Esc)" class="close" onclick={onClose}>
+      <Fa icon={faXmark} size="lg" />
+    </button>
+  </div>
   <div class="content">
     {@render children?.()}
   </div>
@@ -48,11 +71,12 @@ function closeWhenClickingOutside(event: Event) {
     border: none;
     padding: 0;
     display: flex;
+    flex-direction: column;
     min-width: 0;
     width: calc(100% - 2 * var(--padding));
     max-width: 800px;
     margin: auto;
-    overflow: auto;
+    overflow: hidden;
     transition:
             width 0.1s ease-in-out,
             height 0.1s ease-in-out;
@@ -69,6 +93,36 @@ function closeWhenClickingOutside(event: Event) {
       animation: fade 0.2s ease-out;
     }
 
+    .header {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      background: var(--theme-color);
+
+      .title {
+        flex: 1;
+        font-weight: bold;
+        padding: var(--padding);
+      }
+
+      button {
+        width: 40px;
+        align-self: stretch;
+        background: transparent;
+        border: none;
+        color: var(--color);
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: var(--theme-color-highlight);
+      }
+
+      button.close:hover {
+        color: var(--error-color);
+      }
+    }
+
     .content {
       flex: 1;
       display: flex;
@@ -76,6 +130,7 @@ function closeWhenClickingOutside(event: Event) {
       min-width: 0;
       min-height: 0;
       padding: 0;
+      overflow: auto;
     }
 
     @keyframes zoom {

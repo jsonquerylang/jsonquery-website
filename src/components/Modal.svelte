@@ -1,30 +1,38 @@
 <script lang="ts">
-// code based on: https://svelte.dev/examples/modal
-import { onDestroy, onMount } from 'svelte'
-import { onEscape } from './onEscape.js'
+import { onDestroy, onMount, type Snippet } from 'svelte'
 
-// TODO: convert to Svelte 5
-export let onClose: () => void
+interface Props {
+  onClose: () => void
+  children: Snippet
+}
 
-let dialog: HTMLDialogElement
+const { onClose, children }: Props = $props()
 
-onMount(() => dialog.showModal())
-onDestroy(() => dialog.close())
+// biome-ignore lint/style/useConst: must be let, not const
+let refDialog = $state<HTMLDialogElement>()
+
+onMount(() => {
+  refDialog?.showModal()
+  refDialog?.addEventListener('close', close)
+  refDialog?.addEventListener('click', closeWhenClickingOutside)
+})
+
+onDestroy(() => refDialog?.close())
 
 function close() {
   onClose()
 }
+
+function closeWhenClickingOutside(event: Event) {
+  if (event.target === refDialog) {
+    close()
+  }
+}
 </script>
 
-<dialog
-    bind:this={dialog}
-    on:close={close}
-    on:pointerdown|self={close}
-    on:cancel|preventDefault
-    use:onEscape={close}
->
+<dialog bind:this={refDialog}>
   <div class="content">
-    <slot />
+    {@render children?.()}
   </div>
 </dialog>
 
@@ -68,18 +76,6 @@ function close() {
       min-width: 0;
       min-height: 0;
       padding: 0;
-    }
-
-    /* TODO: reuse the styling from ContentLayout */
-    :global(pre.astro-code) {
-      padding: 5px;
-      border-radius: 3px;
-      line-height: 1.4em;
-      font-size: var(--font-size-mono);
-    }
-    :global(p) {
-      line-height: 1.5em;
-      overflow: auto;
     }
 
     @keyframes zoom {

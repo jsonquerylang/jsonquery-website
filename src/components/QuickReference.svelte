@@ -1,8 +1,10 @@
 <script lang="ts">
 import type { MarkdownHeading } from '@astrojs/markdown-remark'
-import { getHeadings } from '../content/reference.md'
+import { compiledContent as compiledSyntaxContent } from '../content/documentation.md'
+import { compiledContent as compiledReferenceContent, getHeadings } from '../content/reference.md'
+import QuickReferenceModal from './QuickReferenceModal.svelte'
 import categories from './data/reference.json'
-import type { ReferenceCategory } from './types'
+import type { ReferenceCategory, ReferenceDoc } from './types'
 
 function validateQuickReference(headings: MarkdownHeading[], categories: ReferenceCategory[]) {
   const documentationAnchors = new Set(
@@ -29,8 +31,18 @@ function validateQuickReference(headings: MarkdownHeading[], categories: Referen
 
 validateQuickReference(getHeadings(), categories)
 
+function findDoc(htmlContent: string, anchor: string): string | undefined {
+  return htmlContent
+    .split(/(?=<h\d)/) // spit the string right before headers like <h2>
+    .find((doc) => doc.match(/<h\d id="([\w-]+)">/)?.[1] === anchor) // find the header with the anchor
+    ?.replaceAll('<a ', '<a target="_blank" ') // ensure any links will be opened on a new page
+}
+
 const docsBaseUrl = '/docs/'
 const referenceBaseUrl = '/reference/'
+
+// biome-ignore lint/style/useConst: Svelte $state is not const
+let selectedDoc: ReferenceDoc | undefined = $state()
 </script>
 
 {#each categories as category}
@@ -55,20 +67,38 @@ const referenceBaseUrl = '/reference/'
       {/each}
       <p>
         Documentation:
-        <a href={`${docsBaseUrl}#${category.documentation.urlAnchor}`} target="_blank"
-          >{category.documentation.title}</a
+        <button
+            type="button"
+            class="quick-reference-button"
+            onclick={async () => {
+              selectedDoc = {
+                url: docsBaseUrl,
+                anchor: category.documentation.urlAnchor,
+                doc: findDoc(await compiledSyntaxContent(), category.documentation.urlAnchor)
+              }
+            }}
         >
+          {category.documentation.title}
+        </button>
       </p>
       {#if category.references?.length > 0}
         <p>{category.name} reference:</p>
         <ul class="reference">
           {#each category.references as reference}
             <li>
-              <a
-                title={reference.title}
-                href={`${referenceBaseUrl}#${reference.urlAnchor}`}
-                target="_blank"><code>{reference.syntax}</code></a
+              <button
+                  type="button"
+                  class="quick-reference-button"
+                  onclick={async () => {
+                    selectedDoc = {
+                      url: referenceBaseUrl,
+                      anchor: reference.urlAnchor,
+                      doc:findDoc(await compiledReferenceContent(), reference.urlAnchor)
+                    }
+                  }}
               >
+                {reference.syntax}
+              </button>
             </li>
           {/each}
         </ul>
@@ -76,6 +106,13 @@ const referenceBaseUrl = '/reference/'
     </div>
   </details>
 {/each}
+
+{#if selectedDoc}
+  <QuickReferenceModal
+      referenceDoc={selectedDoc}
+      onClose={() => selectedDoc = undefined}
+  />
+{/if}
 
 <style>
   details {
@@ -99,26 +136,34 @@ const referenceBaseUrl = '/reference/'
 
   details ul {
     margin: 0;
+    line-height: 1.5em;
   }
 
   code {
-    background: rgba(0, 0, 0, 0.05);
-    padding: 3px;
+    background: var(--code-background);
+    padding: 2px 5px;
     border-radius: var(--border-radius);
-  }
-
-  pre {
-    background: rgba(0, 0, 0, 0.05);
-    padding: 3px;
-    border-radius: var(--border-radius);
+    display: inline-block;
+    font-size: var(--font-size-mono);
   }
 
   pre code {
     background: none;
   }
 
-  .reference a {
-    text-decoration: none;
+  .quick-reference-button {
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-mono);
+    background: var(--link-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 2px 5px;
+    cursor: pointer;
+  }
+
+  .quick-reference-button:hover {
+    background: var(--link-color-highlight);
   }
 
   summary {

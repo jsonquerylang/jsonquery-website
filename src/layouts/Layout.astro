@@ -35,9 +35,12 @@ const { title, description } = Astro.props
   :root {
 		--theme-color: #d5f3bb;
 		--theme-color-highlight: #e1f6ce;
+		--font-family: ubuntu, arial, sans-serif;
+		--font-size: 12pt;
 		--font-family-mono: consolas, menlo, monaco, 'Ubuntu Mono', 'source-code-pro', monospace;
 		--font-size-mono: 13px;
 		--background-color: white;
+		--background-color-gray: #fafafa;
 		--color: #4d4d4d;
 		--header-text-color: #222b00;
 		--link-color: #3fbdd6;
@@ -48,12 +51,14 @@ const { title, description } = Astro.props
 		--button-margin: 5px;
 		--button-border: 1px solid #bfbfbf;
 		--border-radius: 3px;
+		--input-border: 1px solid #bfbfbf;
 		--tab-border-width: 5px;
 		--table-cell-border: 1px solid #e5e5e5;
 		--table-cell-padding: 5px 10px;
 		--code-background: #f0f0f0;
 		--outline-background: #f5f5f5;
 		--outline-border-radius: 10px;
+		--overlay-background: rgba(0, 0, 0, 0.3);
   }
 
   html,
@@ -68,7 +73,8 @@ const { title, description } = Astro.props
   body {
 		display: flex;
 		justify-content: center;
-		font-family: ubuntu, arial, sans-serif;
+		font-family: var(--font-family);
+		font-size: var(--font-size);
 		color: var(--color);
   }
 
@@ -90,13 +96,17 @@ const { title, description } = Astro.props
 		color: var(--link-color-highlight);
   }
 
+	:global(p) {
+		line-height: 1.5em;
+		overflow: auto;
+	}
+
   :global(h1),
   :global(h2),
   :global(h3) {
 		margin-top: 2em;
 		scroll-margin-top: 1em;
   }
-
 
 	:global(h1:first-child) {
 		margin-top: 0;
@@ -124,4 +134,39 @@ const { title, description } = Astro.props
 		left: -1em;
 		content: '# ';
   }
+
+	:global(h1 code),
+	:global(h2 code),
+	:global(h3 code) {
+		font-size: inherit;
+	}
+
+	:global(pre.astro-code) {
+		padding: 5px;
+		border-radius: 3px;
+		line-height: 1.4em;
+		font-size: var(--font-size-mono);
+	}
+
+	:global(table code),
+	:global(p code) {
+		background: var(--code-background);
+		padding: 2px 5px;
+		border-radius: var(--border-radius);
+		display: inline-block;
+		font-size: var(--font-size-mono);
+	}
+
+	:global(pre code) {
+		background: none;
+	}
+
+	:global(table) {
+		border-collapse: collapse;
+	}
+	:global(table th),
+	:global(table td) {
+		border: var(--table-cell-border);
+		padding: var(--table-cell-padding);
+	}
 </style>

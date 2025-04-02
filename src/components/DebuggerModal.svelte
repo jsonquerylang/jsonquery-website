@@ -58,6 +58,7 @@ function next() {
     flex-direction: column;
     gap: var(--padding);
     padding: calc(2 * var(--padding));
+    background: var(--background-color-gray);
   }
 
   .error-message {
@@ -94,6 +95,7 @@ function next() {
         border: var(--input-border);
         padding: 5px;
         border-radius: var(--border-radius);
+        box-sizing: border-box;
       }
     }
   }

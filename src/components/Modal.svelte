@@ -132,23 +132,23 @@ function closeWhenClickingOutside(event: Event) {
       padding: 0;
       overflow: auto;
     }
+  }
 
-    @keyframes zoom {
-      from {
-        transform: scale(0.95);
-      }
-      to {
-        transform: scale(1);
-      }
+  @keyframes zoom {
+    from {
+      transform: scale(0.95);
     }
+    to {
+      transform: scale(1);
+    }
+  }
 
-    @keyframes fade {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
     }
   }
 </style>

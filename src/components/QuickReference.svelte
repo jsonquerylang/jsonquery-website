@@ -35,8 +35,7 @@ async function getReferenceDoc(anchor: string): Promise<string | undefined> {
   const content = await compiledReferenceContent()
 
   return content
-    .split(/(?=<h2)/)
-    .slice(1)
+    .split(/(?=<h)/) // spit the string right before headers like <h2>
     .find((doc) => doc.match(/<h2 id="([\w-]+)">/)?.[1] === anchor)
 }
 
@@ -44,8 +43,7 @@ async function getSyntaxDoc(anchor: string): Promise<string | undefined> {
   const content = await compiledSyntaxContent()
 
   return content
-    .split(/(?=<h3)/)
-    .slice(1)
+    .split(/(?=<h)/) // spit the string right before headers like <h3>
     .find((doc) => doc.match(/<h3 id="([\w-]+)">/)?.[1] === anchor)
 }
 
@@ -78,9 +76,6 @@ let selectedDoc: ReferenceDoc | undefined = $state()
       {/each}
       <p>
         Documentation:
-<!--        <a href={`${docsBaseUrl}#${category.documentation.urlAnchor}`} target="_blank"-->
-<!--          >{category.documentation.title}</a-->
-<!--        >-->
         <button
             type="button"
             class="quick-reference-button"
@@ -90,7 +85,7 @@ let selectedDoc: ReferenceDoc | undefined = $state()
                     doc: await getSyntaxDoc(category.documentation.urlAnchor)
                   }}
         >
-          <code>{category.documentation.title}</code>
+          {category.documentation.title}
         </button>
       </p>
       {#if category.references?.length > 0}
@@ -107,7 +102,7 @@ let selectedDoc: ReferenceDoc | undefined = $state()
                     doc: await getReferenceDoc(reference.urlAnchor)
                   }}
               >
-                <code>{reference.syntax}</code>
+                {reference.syntax}
               </button>
             </li>
           {/each}
@@ -150,16 +145,10 @@ let selectedDoc: ReferenceDoc | undefined = $state()
   }
 
   code {
-    background: rgba(0, 0, 0, 0.05);
-    padding: 3px;
+    background: var(--code-background);
+    padding: 2px 5px;
     border-radius: var(--border-radius);
-    font-size: var(--font-size-mono);
-  }
-
-  pre {
-    background: rgba(0, 0, 0, 0.05);
-    padding: 3px;
-    border-radius: var(--border-radius);
+    display: inline-block;
     font-size: var(--font-size-mono);
   }
 
@@ -170,15 +159,16 @@ let selectedDoc: ReferenceDoc | undefined = $state()
   .quick-reference-button {
     font-family: var(--font-family-mono);
     font-size: var(--font-size-mono);
-    color: var(--link-color);
-    background: none;
+    background: var(--link-color);
+    color: white;
     border: none;
-    padding: 0;
+    border-radius: var(--border-radius);
+    padding: 2px 5px;
     cursor: pointer;
   }
 
   .quick-reference-button:hover {
-    color: var(--link-color-highlight);
+    background: var(--link-color-highlight);
   }
 
   summary {

@@ -69,40 +69,4 @@ const { title, description, headings, enableSearch } = Astro.props
       width: unset;
     }
   }
-
-  :global(p) {
-    line-height: 1.5em;
-    overflow: auto;
-  }
-
-  :global(pre.astro-code) {
-    padding: 5px;
-    border-radius: 3px;
-    line-height: 1.4em;
-    font-size: var(--font-size-mono);
-  }
-
-  :global(h1 code),
-  :global(h2 code),
-  :global(h3 code) {
-    font-size: inherit;
-  }
-
-  :global(table code),
-  :global(p code) {
-    background: var(--code-background);
-    padding: 2px 5px;
-    border-radius: var(--border-radius);
-    display: inline-block;
-    font-size: var(--font-size-mono);
-  }
-
-  :global(table) {
-    border-collapse: collapse;
-  }
-  :global(table th),
-  :global(table td) {
-    border: var(--table-cell-border);
-    padding: var(--table-cell-padding);
-  }
 </style>

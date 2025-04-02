@@ -78,10 +78,4 @@ function openExternalLink() {
     margin-top: 0;
     pointer-events: none; /* disable clickable link in header */
   }
-
-  :global(dialog pre) {
-    padding: 5px;
-    border-radius: 3px;
-    line-height: 1.4em;
-  }
 </style>

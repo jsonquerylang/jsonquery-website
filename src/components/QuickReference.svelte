@@ -31,20 +31,11 @@ function validateQuickReference(headings: MarkdownHeading[], categories: Referen
 
 validateQuickReference(getHeadings(), categories)
 
-async function getReferenceDoc(anchor: string): Promise<string | undefined> {
-  const content = await compiledReferenceContent()
-
-  return content
-    .split(/(?=<h)/) // spit the string right before headers like <h2>
-    .find((doc) => doc.match(/<h2 id="([\w-]+)">/)?.[1] === anchor)
-}
-
-async function getSyntaxDoc(anchor: string): Promise<string | undefined> {
-  const content = await compiledSyntaxContent()
-
-  return content
-    .split(/(?=<h)/) // spit the string right before headers like <h3>
-    .find((doc) => doc.match(/<h3 id="([\w-]+)">/)?.[1] === anchor)
+function findDoc(htmlContent: string, anchor: string): string | undefined {
+  return htmlContent
+    .split(/(?=<h\d)/) // spit the string right before headers like <h2>
+    .find((doc) => doc.match(/<h\d id="([\w-]+)">/)?.[1] === anchor) // find the header with the anchor
+    ?.replaceAll('<a ', '<a target="_blank" ') // ensure any links will be opened on a new page
 }
 
 const docsBaseUrl = '/docs/'
@@ -79,11 +70,13 @@ let selectedDoc: ReferenceDoc | undefined = $state()
         <button
             type="button"
             class="quick-reference-button"
-            onclick={async () => selectedDoc = {
-                    url: docsBaseUrl,
-                    anchor: category.documentation.urlAnchor,
-                    doc: await getSyntaxDoc(category.documentation.urlAnchor)
-                  }}
+            onclick={async () => {
+              selectedDoc = {
+                url: docsBaseUrl,
+                anchor: category.documentation.urlAnchor,
+                doc: findDoc(await compiledSyntaxContent(), category.documentation.urlAnchor)
+              }
+            }}
         >
           {category.documentation.title}
         </button>
@@ -96,10 +89,12 @@ let selectedDoc: ReferenceDoc | undefined = $state()
               <button
                   type="button"
                   class="quick-reference-button"
-                  onclick={async () => selectedDoc = {
-                    url: referenceBaseUrl,
-                    anchor: reference.urlAnchor,
-                    doc: await getReferenceDoc(reference.urlAnchor)
+                  onclick={async () => {
+                    selectedDoc = {
+                      url: referenceBaseUrl,
+                      anchor: reference.urlAnchor,
+                      doc:findDoc(await compiledReferenceContent(), reference.urlAnchor)
+                    }
                   }}
               >
                 {reference.syntax}

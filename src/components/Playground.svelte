@@ -111,7 +111,6 @@ function handleChangeJSONQuery(
 
 function handleDebug(error: Error | JSONQueryError) {
   debugError = isJSONQueryError(error) ? error : null
-  console.log('click!', debugError)
 }
 
 function stringifyError(error: Error | JSONQueryError): string {

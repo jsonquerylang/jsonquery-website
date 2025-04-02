@@ -37,3 +37,9 @@ export interface ReferenceCategory {
     syntax: string
   }>
 }
+
+export interface ReferenceDoc {
+  url: string
+  anchor: string
+  doc: string | undefined
+}

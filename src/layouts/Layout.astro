@@ -35,6 +35,8 @@ const { title, description } = Astro.props
   :root {
 		--theme-color: #d5f3bb;
 		--theme-color-highlight: #e1f6ce;
+		--font-family: ubuntu, arial, sans-serif;
+		--font-size: 12pt;
 		--font-family-mono: consolas, menlo, monaco, 'Ubuntu Mono', 'source-code-pro', monospace;
 		--font-size-mono: 13px;
 		--background-color: white;
@@ -54,6 +56,7 @@ const { title, description } = Astro.props
 		--code-background: #f0f0f0;
 		--outline-background: #f5f5f5;
 		--outline-border-radius: 10px;
+		--overlay-background: rgba(0, 0, 0, 0.3);
   }
 
   html,
@@ -68,7 +71,8 @@ const { title, description } = Astro.props
   body {
 		display: flex;
 		justify-content: center;
-		font-family: ubuntu, arial, sans-serif;
+		font-family: var(--font-family);
+		font-size: var(--font-size);
 		color: var(--color);
   }
 

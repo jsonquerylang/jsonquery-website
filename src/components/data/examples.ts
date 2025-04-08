@@ -37,7 +37,7 @@ export const examples: Example[] = [
   {
     name: 'example 2',
     input: input2,
-    query: `filter((.city == "New York") and (.age > 30))\n`
+    query: `filter(.city == "New York" and .age > 30)\n`
   },
   {
     name: 'example 3',

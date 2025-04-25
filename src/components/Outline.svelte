@@ -18,6 +18,19 @@ const filteredHeadings = $derived(
     ? headings.filter((heading) => heading.text.toLowerCase().includes(searchTrimLower))
     : headings
 )
+
+function handleKeydown(event: KeyboardEvent) {
+  if (event.key === 'Enter') {
+    event.preventDefault()
+    const firstHeading = filteredHeadings[0]
+    if (firstHeading) {
+      window.location.hash = firstHeading.slug
+
+      const input = event.currentTarget as HTMLInputElement
+      input.focus()
+    }
+  }
+}
 </script>
 
 <div class="outline">
@@ -27,7 +40,7 @@ const filteredHeadings = $derived(
 
   {#if enableSearch}
     <!-- svelte-ignore a11y_autofocus -->
-    <input bind:value={search} placeholder="Search..." class="search" autofocus />
+    <input bind:value={search} placeholder="Search..." class="search" autofocus onkeydown={handleKeydown} />
   {/if}
 
   <ul>

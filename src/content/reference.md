@@ -173,7 +173,7 @@ jsonquery(data, 'filter((.age > 30) and (.address.city == "New York"))')
 
 ## sort
 
-Sort a list with objects or values.
+Sort a list with objects or values. The function first orders values by type: `boolean`, `number`, `string`, and other types. Strings are compared alphabetically and case-sensitive. Objects and arrays are not re-ordered.
 
 ```text
 sort()
@@ -741,7 +741,7 @@ jsonquery({ a: 2 }, 'eq(.a, 2)') // true
 
 ## gt (`>`)
 
-Test whether `a` is greater than `b`. The operator only supports comparing numbers with numbers or comparing strings with strings.
+Test whether `a` is greater than `b`. The operator supports comparing two numbers, two strings, or two booleans.
 
 
 ```text
@@ -766,7 +766,7 @@ jsonquery(data, 'filter(.age > 18)')
 
 ## gte (`>=`)
 
-Test whether `a` is greater than or equal to `b`. The operator only supports comparing numbers with numbers or comparing strings with strings.
+Test whether `a` is greater than or equal to `b`. The operator supports comparing two numbers, two strings, or two booleans.
 
 ```text
 a >= b
@@ -791,7 +791,7 @@ jsonquery(data, 'filter(.age >= 18)')
 
 ## lt (`<`)
 
-Test whether `a` is less than `b`. The operator only supports comparing numbers with numbers or comparing strings with strings.
+Test whether `a` is less than `b`. The operator supports comparing two numbers, two strings, or two booleans.
 
 ```text
 a < b
@@ -815,7 +815,7 @@ jsonquery(data, 'filter(.age < 18)')
 
 ## lte (`<=`)
 
-Test whether `a` is less than or equal to `b`. The operator only supports comparing numbers with numbers or comparing strings with strings.
+Test whether `a` is less than or equal to `b`. The operator supports comparing two numbers, two strings, or two booleans.
 
 ```text
 a <= b

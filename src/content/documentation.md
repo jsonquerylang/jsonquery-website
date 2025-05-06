@@ -46,7 +46,7 @@ The following table gives an overview of the JSON query Text Format:
 | Type                    | Syntax                                                                             | Example                                                                                 |
 |-------------------------|------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
 | [Function](#functions)  | `name(argument1, argument2, ...)`                                                  | `sort(.age, "asc")`                                                                     |
-| [Operator](#operators)  | `(left operator right)`                                                            | `filter(.age >= 18)`                                                                    |
+| [Operator](#operators)  | `left operator right`                                                              | `filter(.age >= 18)`                                                                    |
 | [Pipe](#pipes)          | <code>query1 &#124; query2 &#124; ...</code>                                       | <code>sort(.age) &#124; pick(.name, .age)</code>                                        |
 | [Object](#objects)      | `{ prop1: query1, prop2: query2, ... }`                                            | `{ names: map(.name), total: sum() }`                                                   |
 | [Array](#arrays)        | `[ item1, item2, ... ]`                                                            | `[ "New York", "Atlanta" ]`                                                             |
@@ -94,16 +94,16 @@ See page [Function reference](/reference) for a detailed overview of all availab
 
 ### Operators
 
-JSON Query supports all basic operators. Operators must be wrapped in parentheses `(...)`, must have both a left and right hand side, and do not have precedence since parentheses are required. The syntax is:
+JSON Query supports all basic operators. Operators must have both a left and right hand side. To override the default precedence, an operator can be wrapped in parentheses `(...)`. The syntax is:
 
 ```text
-(left operator right)
+left operator right
 ```
 
 The following example tests whether a property `age` is greater than or equal to `18`:
 
 ```text
-(.age >= 18)
+.age >= 18
 ```
 
 Operators are for example used to specify filter conditions:
@@ -112,11 +112,26 @@ Operators are for example used to specify filter conditions:
 filter(.age >= 18)
 ```
 
-When composing multiple operators, it is necessary to use parentheses:
+When using multiple operators, they will be evaluated according to their precedence (highest first):
 
 ```text
-filter((.age >= 18) and (.age <= 65))
+filter(.age >= 18 and .age <= 65)
 ```
+
+Note that some operators, like `and`, `or`, `+`, and `-`, support more than two values and are evaluated left-to-right, like `2 + 3 + 4`. Others, like `^` and `==`, do not support more than two values. If needed, it is always possible to use parenthesis, like `(2 ^ 3) ^ 4`.
+
+The operators have the following precedence, from highest to lowest:
+
+| Precedence                  | Associativity | Operators                            |
+|-----------------------------|---------------|--------------------------------------|
+| 8: exponentiation           | n/a           | `^`                                  |
+| 7: multiplicative operators | left-to-right | `*`, `/`, `%`                        |
+| 6: additive operators       | left-to-right | `+`, `-`                             |
+| 5: relational operators     | n/a           | `>`, `>=`, `<`, `<=`, `in`, `not in` |
+| 4: equality operators       | n/a           | `==`, `!=`                           |
+| 3: and                      | left-to-right | `and`                                |
+| 2: or                       | left-to-right | `or`                                 |
+| 1: pipe                     | left-to-right | `\|`                                 |
 
 See page [Function reference](/reference) for a detailed overview of all available functions and operators.
 

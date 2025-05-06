@@ -559,7 +559,7 @@ jsonquery(events, 'map(substring(.time, 0, 10))')
 
 ## uniq
 
-Create a copy of an array where all duplicates are removed.
+Create a copy of an array where all duplicates are removed. Values are compared using the `eq` operator, which does a deep strict equal comparison.
 
 ```text
 uniq()
@@ -636,7 +636,7 @@ jsonquery("hello", 'size()') // 5
 
 ## sum
 
-Calculate the sum of all values in an array.
+Calculate the sum of all values in an array. The function return `0` in case of an empty array.
 
 ```text
 sum()
@@ -651,7 +651,7 @@ jsonquery([2.4, 5.7], 'sum()') // 8.1
 
 ## min
 
-Return the minimum of the values in an array.
+Return the minimum of the values in an array. The function throws an error in case of an empty array.
 
 ```text
 min()
@@ -666,7 +666,7 @@ jsonquery([5, 7, 3], 'min()') // 3
 
 ## max
 
-Return the maximum of the values in an array.
+Return the maximum of the values in an array. The function throws an error in case of an empty array.
 
 ```text
 max()
@@ -681,7 +681,7 @@ jsonquery([5, 7, 3], 'max()') // 7
 
 ## prod
 
-Calculate the product of the values in an array.
+Calculate the product of the values in an array. The function throws an error in case of an empty array.
 
 ```text
 prod()
@@ -696,7 +696,7 @@ jsonquery([2, 3, 2, 7, 1, 1], 'prod()') // 84
 
 ## average
 
-Calculate the average of the values in an array.
+Calculate the average of the values in an array. The function throws an error in case of an empty array.
 
 ```text
 average()
@@ -711,7 +711,7 @@ jsonquery([2, 3, 2, 7, 1], 'average()') // 3
 
 ## eq (`==`)
 
-Test whether two values are strictly equal. This will consider a string `"2"` and a number `2` to be _not_ equal for example since their data type differs.
+Test whether two values are deep strict equal. This will consider a string `"2"` and a number `2` to be _not_ equal for example, since their data type differs. Objects and arrays are compared recursively, so `{"id":1,"name":"Joe"}` and `{"name":"Joe","id":1}` are deep equal for example.
 
 ```text
 a == b
@@ -741,7 +741,8 @@ jsonquery({ a: 2 }, 'eq(.a, 2)') // true
 
 ## gt (`>`)
 
-Test whether `a` is greater than `b`.
+Test whether `a` is greater than `b`. The operator only supports comparing numbers with numbers or comparing strings with strings.
+
 
 ```text
 a > b
@@ -765,7 +766,7 @@ jsonquery(data, 'filter(.age > 18)')
 
 ## gte (`>=`)
 
-Test whether `a` is greater than or equal to `b`.
+Test whether `a` is greater than or equal to `b`. The operator only supports comparing numbers with numbers or comparing strings with strings.
 
 ```text
 a >= b
@@ -790,7 +791,7 @@ jsonquery(data, 'filter(.age >= 18)')
 
 ## lt (`<`)
 
-Test whether `a` is less than `b`.
+Test whether `a` is less than `b`. The operator only supports comparing numbers with numbers or comparing strings with strings.
 
 ```text
 a < b
@@ -814,7 +815,7 @@ jsonquery(data, 'filter(.age < 18)')
 
 ## lte (`<=`)
 
-Test whether `a` is less than or equal to `b`.
+Test whether `a` is less than or equal to `b`. The operator only supports comparing numbers with numbers or comparing strings with strings.
 
 ```text
 a <= b
@@ -839,7 +840,7 @@ jsonquery(data, 'filter(.age <= 18)')
 
 ## ne (`!=`)
 
-Test whether two values are not equal. This is the opposite of the strict equal function `eq`. Two values are considered unequal when their data type differs (for example one is a string and another is a number), or when the value itself is different. For example a string `"2"` and a number `2` are considered unequal, even though their mathematical value is equal.
+Test whether two values are not deep strict equal. This is the opposite of the strict equal function `eq`. Two values are considered unequal when their data type differs (for example one is a string and another is a number), or when the value itself is different. For example a string `"2"` and a number `2` are considered unequal, even though their mathematical value is equal. Objects and arrays are compared recursively, so `{"id":1,"name":"Joe"}` and `{"name":"Joe","id":1}` are deep equal for example.
 
 ```text
 a != b
@@ -868,7 +869,7 @@ jsonquery({ a: 2 }, 'a != "2"') // true (since not strictly equal)
 
 ## and
 
-Test whether two or more values are truthy. A non-truthy value is any of `false`, `0`, `""`, `null`, or `undefined`.
+Test whether two or more values are truthy. A non-truthy value is any of `false`, `0`, `""`, `null`, or `undefined`. The function throws an error in case of zero arguments.
 
 ```text
 a and b
@@ -894,7 +895,7 @@ jsonquery(data, 'filter((.name == "Chris") and (.age == 16))')
 
 ## or
 
-Test whether at least one of the values is truthy. A non-truthy value is any of `false`, `0`, `""`, `null`, or `undefined`.
+Test whether at least one of the values is truthy. A non-truthy value is any of `false`, `0`, `""`, `null`, or `undefined`. The function throws an error in case of zero arguments.
 
 ```text
 a or b
@@ -1001,7 +1002,7 @@ jsonquery(data, 'if(.kid.age >= .minAge, .messageOk, .messageFail)')
 
 ## in
 
-Test whether the search value is one of the values of the provided list.
+Test whether the search value is one of the values of the provided list. Values are compared using the `eq` operator, which does a deep strict equal comparison.
 
 ```text
 searchValue in values
@@ -1026,7 +1027,7 @@ jsonquery(data, 'filter(.age in [16, 18])')
 
 ## not in
 
-Test whether the search value is _not_ one of the values of the provided list.
+Test whether the search value is _not_ one of the values of the provided list. Values are compared using the `eq` operator, which does a deep strict equal comparison.
 
 ```text
 searchValue not in values

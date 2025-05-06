@@ -651,7 +651,7 @@ jsonquery([2.4, 5.7], 'sum()') // 8.1
 
 ## min
 
-Return the minimum of the values in an array. The function throws an error in case of an empty array.
+Return the minimum of the values in an array. The function returns `null` in case of an empty array.
 
 ```text
 min()
@@ -666,7 +666,7 @@ jsonquery([5, 7, 3], 'min()') // 3
 
 ## max
 
-Return the maximum of the values in an array. The function throws an error in case of an empty array.
+Return the maximum of the values in an array. The function returns `null` in case of an empty array.
 
 ```text
 max()

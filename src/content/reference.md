@@ -741,7 +741,7 @@ jsonquery({ a: 2 }, 'eq(.a, 2)') // true
 
 ## gt (`>`)
 
-Test whether `a` is greater than `b`. The operator supports comparing two numbers, two strings, or two booleans.
+Test whether `a` is greater than `b`. The operator supports comparing two numbers, two strings, or two booleans. In case of unsupported data types or mixed data types, the function returns `false.
 
 
 ```text
@@ -766,7 +766,7 @@ jsonquery(data, 'filter(.age > 18)')
 
 ## gte (`>=`)
 
-Test whether `a` is greater than or equal to `b`. The operator supports comparing two numbers, two strings, or two booleans.
+Test whether `a` is greater than or equal to `b`. The operator supports comparing two numbers, two strings, or two booleans. In case of unsupported data types or mixed data types, the function returns `false.
 
 ```text
 a >= b
@@ -791,7 +791,7 @@ jsonquery(data, 'filter(.age >= 18)')
 
 ## lt (`<`)
 
-Test whether `a` is less than `b`. The operator supports comparing two numbers, two strings, or two booleans.
+Test whether `a` is less than `b`. The operator supports comparing two numbers, two strings, or two booleans. In case of unsupported data types or mixed data types, the function returns `false.
 
 ```text
 a < b
@@ -815,7 +815,7 @@ jsonquery(data, 'filter(.age < 18)')
 
 ## lte (`<=`)
 
-Test whether `a` is less than or equal to `b`. The operator supports comparing two numbers, two strings, or two booleans.
+Test whether `a` is less than or equal to `b`. The operator supports comparing two numbers, two strings, or two booleans. In case of unsupported data types or mixed data types, the function returns `false.
 
 ```text
 a <= b

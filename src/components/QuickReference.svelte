@@ -147,8 +147,8 @@ let selectedDoc: ReferenceDoc | undefined = $state()
     font-size: var(--font-size-mono);
   }
 
-  pre code {
-    background: none;
+  pre {
+    margin: 2px;
   }
 
   .quick-reference-button {

@@ -4,15 +4,8 @@ import Button from './Button.svelte'
 import DebuggerModal from './DebuggerModal.svelte'
 import QuickReference from './QuickReference.svelte'
 import { stringifyJson } from './stringifyJson'
-import type {
-  JSONQueryError,
-  JSONType,
-  Output,
-  OutputError,
-  ProcessedQuery,
-  QueryText,
-  QueryTextFormat
-} from './types'
+import type { JSONQueryError, JSONType, Output, ProcessedQuery, QueryText } from './types'
+import { isJSONQueryError, isOutputError, isTextFormat } from './typeguards.ts'
 
 let {
   input = $bindable('input'),
@@ -79,18 +72,6 @@ function go(inputText: string, parsedQuery: ProcessedQuery): Output {
       error: err as Error
     }
   }
-}
-
-function isTextFormat(query: QueryText): query is QueryTextFormat {
-  return query && 'textFormat' in query
-}
-
-function isOutputError(output: Output): output is OutputError {
-  return output && 'error' in output
-}
-
-function isJSONQueryError(error: Error): error is JSONQueryError {
-  return error && 'jsonquery' in error
 }
 
 function handleChangeTextQuery(

@@ -1,4 +1,4 @@
-import { Formatter, FracturedJsonOptions } from 'fracturedjsonjs'
+import { Formatter, FracturedJsonOptions, TableCommaPlacement } from 'fracturedjsonjs'
 
 export function stringifyJson(json: unknown): string {
   const formatter = new Formatter()
@@ -9,6 +9,7 @@ export function stringifyJson(json: unknown): string {
   formatter.Options.SimpleBracketPadding = false
   formatter.Options.NestedBracketPadding = false
   formatter.Options.OmitTrailingWhitespace = true
+  formatter.Options.TableCommaPlacement = TableCommaPlacement.BeforePadding
 
   return formatter.Reformat(JSON.stringify(json, null, 2))
 }

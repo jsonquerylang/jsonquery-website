@@ -1,10 +1,10 @@
 <script lang="ts">
 import { compile, jsonquery, parse, stringify } from '@jsonquerylang/jsonquery'
-import { isTextFormat } from './typeguards';
 import Button from './Button.svelte'
+import { type Example, examples } from './data/examples'
 import Playground from './Playground.svelte'
-import { examples, type Example } from './data/examples'
 import { loadLocalStorage, saveLocalStorage } from './runes/localStorageState.svelte'
+import { isTextFormat } from './typeguards'
 import type { QueryText } from './types'
 
 if (typeof window !== 'undefined') {
@@ -18,7 +18,6 @@ const keyQueryTab = 'playground-query-tab'
 
 let name = $state(examples[0].name)
 let input = $state(loadLocalStorage(keyInput, examples[0].input))
-// biome-ignore lint/style/useConst: must be let for Svelte
 let queryTab: 'text' | 'json' = $state(loadLocalStorage(keyQueryTab, 'text'))
 let query: QueryText = $state(loadLocalStorage(keyQuery, { textFormat: examples[0].query }))
 
@@ -33,13 +32,11 @@ function loadExample(example: Example) {
 }
 
 const activeExample = $derived(
-    examples.find(
-      (example) =>
-        example.input === input &&
-        isTextFormat(query) &&
-        example.query === query.textFormat
-    )
-  );
+  examples.find(
+    (example) =>
+      example.input === input && isTextFormat(query) && example.query === query.textFormat
+  )
+)
 </script>
 
 <div class="examples">

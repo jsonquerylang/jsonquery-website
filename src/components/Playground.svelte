@@ -4,8 +4,8 @@ import Button from './Button.svelte'
 import DebuggerModal from './DebuggerModal.svelte'
 import QuickReference from './QuickReference.svelte'
 import { stringifyJson } from './stringifyJson'
-import type { JSONQueryError, JSONType, Output, ProcessedQuery, QueryText } from './types'
 import { isJSONQueryError, isOutputError, isTextFormat } from './typeguards.ts'
+import type { JSONQueryError, JSONType, Output, ProcessedQuery, QueryText } from './types'
 
 let {
   input = $bindable('input'),

@@ -2,8 +2,8 @@
 import type { MarkdownHeading } from '@astrojs/markdown-remark'
 import { compiledContent as compiledSyntaxContent } from '../content/documentation.md'
 import { compiledContent as compiledReferenceContent, getHeadings } from '../content/reference.md'
-import QuickReferenceModal from './QuickReferenceModal.svelte'
 import categories from './data/reference.json'
+import QuickReferenceModal from './QuickReferenceModal.svelte'
 import type { ReferenceCategory, ReferenceDoc } from './types'
 
 function validateQuickReference(headings: MarkdownHeading[], categories: ReferenceCategory[]) {
@@ -41,7 +41,6 @@ function findDoc(htmlContent: string, anchor: string): string | undefined {
 const docsBaseUrl = '/docs/'
 const referenceBaseUrl = '/reference/'
 
-// biome-ignore lint/style/useConst: Svelte $state is not const
 let selectedDoc: ReferenceDoc | undefined = $state()
 </script>
 

@@ -8,7 +8,6 @@ interface Props {
 
 const { headings, enableSearch = false }: Props = $props()
 
-// biome-ignore lint/style/useConst: Svelte state must not be const
 let search = $state('')
 
 const searchTrimLower = $derived(search.trim().toLowerCase())

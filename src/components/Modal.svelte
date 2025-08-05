@@ -1,6 +1,6 @@
 <script lang="ts">
-import { type IconDefinition, faXmark } from '@fortawesome/free-solid-svg-icons'
-import { type Snippet, onDestroy, onMount } from 'svelte'
+import { faXmark, type IconDefinition } from '@fortawesome/free-solid-svg-icons'
+import { onDestroy, onMount, type Snippet } from 'svelte'
 import Fa from 'svelte-fa'
 
 interface Props {
@@ -16,7 +16,6 @@ interface Props {
 
 const { title, children, actions = [], onClose }: Props = $props()
 
-// biome-ignore lint/style/useConst: must be let, not const
 let refDialog = $state<HTMLDialogElement>()
 
 onMount(() => {

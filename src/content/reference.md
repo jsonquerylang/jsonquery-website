@@ -101,16 +101,16 @@ jsonquery(locations, 'map([.latitude, .longitude])')
 
 ## get
 
-Get a path from an object.
+Get a path from an object or get an array item.
 
 ```text
 .prop1
 .prop1.prop2
 ."prop1"
-get(prop1, prop2, ...)
+get("prop1", "prop2", ...)
 ```
 
-For example `.age` gets the property `age` from an object, and `.address.city` gets a nested property `city` inside an object `address`. To get the current value or object itself use function `get()` without properties.
+For example `.age` gets the property `age` from an object, and `.address.city` gets a nested property `city` inside an object `address`. To get the current value or object itself use function `get()` without properties. Array indexes can be retrieved using a property like `.2` or the function `get(2)`.
 
 The function returns `null` when a property does not exist.
 
@@ -127,6 +127,10 @@ const data = {
 
 jsonquery(data, '.name') // "Joe"
 jsonquery(data, '.address.city') // "New York"
+jsonquery(data, 'get("address", "city")') // "New York"
+
+jsonquery(["A", "B", "C"], 'get(2)') // "C"
+jsonquery(["A", "B", "C"], '.2') // "C"
 ```
 
 ## filter

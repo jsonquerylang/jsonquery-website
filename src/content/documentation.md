@@ -200,7 +200,7 @@ filter(.city in ["New York", "Atlanta"])
 
 ### Properties
 
-An important feature is the property getter. It allows to get a property from an object or an item from an array:
+An important feature is the property getter. It allows to get a property from an object or an item from an array. To get a property `age` from an object, use:
 
 ```text
 .age

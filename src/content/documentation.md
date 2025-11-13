@@ -231,7 +231,7 @@ get("age")
 get("address", "city")
 ```
 
-Array indexes can be retrieved using a property or the function `get`. For example, to get the item with index `2` from an array, use one of the following two options. Note that a square bracket notation like `array[2]` is _not_ supported.
+Array items can be retrieved using a property or the function `get`. For example, to get the item with index `2` from an array, use one of the following two options. Note that square bracket notation like `array[2]` is _not_ supported.
 
 ```text
 get(2)

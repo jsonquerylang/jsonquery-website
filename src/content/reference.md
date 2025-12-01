@@ -1061,7 +1061,9 @@ regex(text, expression)
 regex(text, expression, options)
 ```
 
-Here, `expression` is a string containing the regular expression like `^[a-z]+$`, and `options` are regular expression flags like `i`.
+Here, `expression` is a string containing the regular expression like `^[a-z]+$`, and `options` are regular expression flags like `i`. The function returns `true` when there is a match, and returns `false` otherwise. This function is useful for example for filtering.
+
+See also functions `match` and `matchAll`, which return the actual matches.
 
 Examples:
 
@@ -1084,6 +1086,135 @@ jsonquery(data, 'filter(regex(.message, "like|awesome", "i"))')
 //   { "id": 1, "message": "I LIKE it!" },
 //   { "id": 2, "message": "It is awesome!" },
 //   { "id": 4, "message": "We like it a lot" }
+// ]
+```
+
+
+## match
+
+Find the first match of the provided regular expression in `text` and return this. See also functions `regex` and `matchAll`.
+
+```text
+match(text, expression)
+match(text, expression, options)
+```
+
+Here, `expression` is a string containing the regular expression like `^[a-z]+$`, and `options` are regular expression flags like `i`. The function returns `null` when no match is found, and returns an object with a property `matches` containing the matches of the first occurrence. When the regular expression contains match groups, the returned object will contain an additional property `groups` containing those. In TypeScript notation, the return type is defined as:
+
+```ts
+type MatchResult = null | { 
+  "matches": string[], 
+  "groups"?: { 
+    [groupName: string] : string 
+  } 
+}
+```
+
+Examples:
+
+```js
+jsonquery('Hello world!', 'match(get(), "[a-z]+", "i")')
+// { "matches": ["Hello"] }
+
+// an example with match groups. Note that the regex for a digit \d must be
+// escaped twice because it is inside a JSON string inside a JavaScript string.
+jsonquery(
+  'Save the date: 2025-12-25!',
+  'match(get(), "(?<year>[0-9]{4})-(?<month>\\\\d{2})-(?<date>\\\\d{2})")'
+)
+// {
+//   "matches": ["2025-12-25", "2025", "12", "25"],
+//   "groups": {"year": "2025", "month": "12", "date": "25"}
+// }
+
+const data = [
+  { id: 1, message: 'Shall we meet at 2025-12-04?' },
+  { id: 2, message: 'Beginning of next year, for example 2026-01-09, is most handy for me' },
+  { id: 3, message: 'Can we plan something next week?' },
+  { id: 4, message: 'Can we discuss the details on 2025-12-02, 2025-12-03, or 2025-12-05?' }
+]
+
+// map over an array, extracting matches from string inputs.
+jsonquery(
+  data,
+  `map({ 
+    id: .id, 
+    firstDate: match(.message, "\\\\d{4}-\\\\d{2}-\\\\d{2}") | .matches.0
+  })`
+)
+// [
+//   {"id": 1, "firstDate": "2025-12-04"},
+//   {"id": 2, "firstDate": "2026-01-09"},
+//   {"id": 3, "firstDate": null},
+//   {"id": 4, "firstDate": "2025-12-02"}
+// ]
+```
+
+## matchAll
+
+Find all matches of the provided regular expression in `text`. See also functions `regex` and `matchAll`.
+
+```text
+match(text, expression)
+match(text, expression, options)
+```
+
+Here, `expression` is a string containing the regular expression like `^[a-z]+$`, and `options` are regular expression flags like `i`. The function returns an array with every occurrence as an array item. When there are no matches, an empty array is returned. Like with function `match`, every match is returned as an object with a property `mathces`. When the regular expression contains match groups, the returned object will contain an additional property `groups` containing them. In TypeScript notation, the return type is defined as:
+
+```ts
+type MatchAllResult = null | Array<{
+  "matches": string[],
+  "groups"?: {
+    [groupName: string] : string
+  }
+}>
+```
+
+Examples:
+
+```js
+jsonquery('Hello world!', 'matchAll(get(), "[a-z]+", "i")')
+// [
+//   { "matches": ["Hello"] },
+//   { "matches": ["world"] }
+// ]
+
+// an example with match groups. Note that the regex for a digit \d must be
+// escaped twice because it is inside a JSON string inside a JavaScript string.
+jsonquery(
+  'We will be on holiday from 2026-08-14 till 2026-08-28',
+  'matchAll(get(), "(?<year>[0-9]{4})-(?<month>\\\\d{2})-(?<date>\\\\d{2})")'
+)
+// [
+//   {
+//     "matches": ["2026-08-14", "2026", "08", "14"],
+//     "groups": {"year": "2026", "month": "08", "date": "14"}
+//   },
+//   {
+//     "matches": ["2026-08-28", "2026", "08", "28"],
+//     "groups": {"year": "2026", "month": "08", "date": "28"}
+//   }
+// ]
+
+const data = [
+  { id: 1, message: 'Shall we meet at 2025-12-04?' },
+  { id: 2, message: 'Beginning of next year, for example 2026-01-09, is most handy for me' },
+  { id: 3, message: 'Can we plan something next week?' },
+  { id: 4, message: 'Can we discuss the details on 2025-12-02, 2025-12-03, or 2025-12-05?' }
+]
+
+jsonquery(
+  data,
+  `map({ 
+    id: .id, 
+    allDates: matchAll(.message, "\\\\d{4}-\\\\d{2}-\\\\d{2}") | map(.matches.0)
+  })`
+)
+// [
+//   { "id": 1, "allDates": ["2025-12-04"] },
+//   { "id": 2, "allDates": ["2026-01-09"] },
+//   { "id": 3, "allDates": [] },
+//   { "id": 4, "allDates": ["2025-12-02", "2025-12-03", "2025-12-05"] }
 // ]
 ```
 

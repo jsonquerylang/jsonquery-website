@@ -50,6 +50,16 @@
         "urlAnchor": "regex",
         "syntax": "regex(text, expression, options)"
       },
+      {
+        "title": "match",
+        "urlAnchor": "match",
+        "syntax": "match(text, expression, options)"
+      },
+      {
+        "title": "matchAll",
+        "urlAnchor": "matchall",
+        "syntax": "matchAll(text, expression, options)"
+      },
       { "urlAnchor": "round", "syntax": "round(value, digits)" },
       { "urlAnchor": "abs", "syntax": "abs(value)" },
       { "urlAnchor": "number", "syntax": "number(text)" },

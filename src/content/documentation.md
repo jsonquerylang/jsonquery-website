@@ -238,6 +238,8 @@ get(2)
 .2
 ```
 
+Properties support optional chaining by default, so searching for say `.oops.city` inside an object `{"address": {"city": "New York"}}` will return `null`.
+
 
 ### Values
 

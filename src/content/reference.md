@@ -1099,14 +1099,17 @@ match(text, expression)
 match(text, expression, options)
 ```
 
-Here, `expression` is a string containing the regular expression like `^[a-z]+$`, and `options` are regular expression flags like `i`. The function returns `null` when no match is found, and returns an object with a property `matches` containing the matches of the first occurrence. When the regular expression contains match groups, the returned object will contain an additional property `groups` containing those. In TypeScript notation, the return type is defined as:
+Here, `expression` is a string containing the regular expression like `^[a-z]+$`, and `options` are regular expression flags like `i`. The function returns `null` when no match is found, and returns an object with a property `value` containing the text of the first occurrence. When the regular expression contains capturing groups, the returned object will contain an additional property `groups` containing a list with those. And when the regular expression contains named capturing groups, the output will contain an additional object `namedGroups`. Note that for named capturing groups, it is best to use the `(?<name>...)` notation and not `(?P<name>...)`, since the first notation is supported by all major programming languages and the latter only in some languages such as Python. 
+
+In TypeScript notation, the return type of function `match` is defined as:
 
 ```ts
-type MatchResult = null | { 
-  "matches": string[], 
-  "groups"?: { 
-    [groupName: string] : string 
-  } 
+type MatchResult = null | {
+  "value": string,
+  "groups"?: string[]
+  "namedGroups"?: {
+    [name: string] : string
+  }
 }
 ```
 
@@ -1114,17 +1117,17 @@ Examples:
 
 ```js
 jsonquery('Hello world!', 'match(get(), "[a-z]+", "i")')
-// { "matches": ["Hello"] }
+// { "value": "Hello" }
 
-// an example with match groups. Note that the regex for a digit \d must be
-// escaped twice because it is inside a JSON string inside a JavaScript string.
+// an example with match groups
 jsonquery(
   'Save the date: 2025-12-25!',
-  'match(get(), "(?<year>[0-9]{4})-(?<month>\\\\d{2})-(?<date>\\\\d{2})")'
+  'match(get(), "(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<date>[0-9]{2})")'
 )
 // {
-//   "matches": ["2025-12-25", "2025", "12", "25"],
-//   "groups": {"year": "2025", "month": "12", "date": "25"}
+//   "value": "2025-12-25", 
+//   "groups": ["2025", "12", "25"],
+//   "namedGroups": {"year": "2025", "month": "12", "date": "25"}
 // }
 
 const data = [
@@ -1135,11 +1138,13 @@ const data = [
 ]
 
 // map over an array, extracting matches from string inputs.
+// Note that the regex for a digit \d must be escaped twice in this
+// case because it is inside a JSON string inside a JavaScript string.
 jsonquery(
   data,
   `map({ 
     id: .id, 
-    firstDate: match(.message, "\\\\d{4}-\\\\d{2}-\\\\d{2}") | .matches.0
+    firstDate: match(.message, "\\\\d{4}-\\\\d{2}-\\\\d{2}") | .value
   })`
 )
 // [
@@ -1152,20 +1157,23 @@ jsonquery(
 
 ## matchAll
 
-Find all matches of the provided regular expression in `text`. See also functions `regex` and `matchAll`.
+Find all matches of the provided regular expression in `text`. See also functions `regex` and `match`.
 
 ```text
-match(text, expression)
-match(text, expression, options)
+matchAll(text, expression)
+matchAll(text, expression, options)
 ```
 
-Here, `expression` is a string containing the regular expression like `^[a-z]+$`, and `options` are regular expression flags like `i`. The function returns an array with every occurrence as an array item. When there are no matches, an empty array is returned. Like with function `match`, every match is returned as an object with a property `mathces`. When the regular expression contains match groups, the returned object will contain an additional property `groups` containing them. In TypeScript notation, the return type is defined as:
+Here, `expression` is a string containing the regular expression like `^[a-z]+$`, and `options` are regular expression flags like `i`. The function returns an array with every occurrence as an array item. When there are no matches, an empty array is returned. Like with function `match`, every match is returned as an object with a property `value`. When the regular expression contains capturing groups, the returned object will contain an additional property `groups` containing a list with those. And when the regular expression contains named capturing groups, the output will contain an additional object `namedGroups`. Note that for named capturing groups, it is best to use the `(?<name>...)` notation and not `(?P<name>...)`, since the first notation is supported by all major programming languages and the latter only in some languages such as Python. 
+
+In TypeScript notation, the return type of function `matchAll` is defined as:
 
 ```ts
 type MatchAllResult = null | Array<{
-  "matches": string[],
-  "groups"?: {
-    [groupName: string] : string
+  "value": string,
+  "groups"?: string[]
+  "namedGroups"?: {
+    [name: string] : string
   }
 }>
 ```
@@ -1175,24 +1183,25 @@ Examples:
 ```js
 jsonquery('Hello world!', 'matchAll(get(), "[a-z]+", "i")')
 // [
-//   { "matches": ["Hello"] },
-//   { "matches": ["world"] }
+//   { "value": "Hello" },
+//   { "value": "world" }
 // ]
 
-// an example with match groups. Note that the regex for a digit \d must be
-// escaped twice because it is inside a JSON string inside a JavaScript string.
+// an example with match groups. 
 jsonquery(
   'We will be on holiday from 2026-08-14 till 2026-08-28',
-  'matchAll(get(), "(?<year>[0-9]{4})-(?<month>\\\\d{2})-(?<date>\\\\d{2})")'
+  'matchAll(get(), "(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<date>[0-9]{2})")'
 )
 // [
 //   {
-//     "matches": ["2026-08-14", "2026", "08", "14"],
-//     "groups": {"year": "2026", "month": "08", "date": "14"}
+//     "value": "2026-08-14",
+//     "groups": ["2026", "08", "14"],
+//     "namedGroups": {"year": "2026", "month": "08", "date": "14"}
 //   },
 //   {
-//     "matches": ["2026-08-28", "2026", "08", "28"],
-//     "groups": {"year": "2026", "month": "08", "date": "28"}
+//     "value": "2026-08-28",
+//     "groups": ["2026", "08", "28"],
+//     "namedGroups": {"year": "2026", "month": "08", "date": "28"}
 //   }
 // ]
 
@@ -1203,11 +1212,13 @@ const data = [
   { id: 4, message: 'Can we discuss the details on 2025-12-02, 2025-12-03, or 2025-12-05?' }
 ]
 
+// Note that the regex for a digit \d must be escaped
+// twice in this case because it is inside a JSON string inside a JavaScript string.
 jsonquery(
   data,
   `map({ 
     id: .id, 
-    allDates: matchAll(.message, "\\\\d{4}-\\\\d{2}-\\\\d{2}") | map(.matches.0)
+    allDates: matchAll(.message, "\\\\d{4}-\\\\d{2}-\\\\d{2}") | map(.value)
   })`
 )
 // [

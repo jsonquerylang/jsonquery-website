@@ -1119,7 +1119,7 @@ Examples:
 jsonquery('Hello world!', 'match(get(), "[a-z]+", "i")')
 // { "value": "Hello" }
 
-// an example with match groups
+// an example with named capturing groups
 jsonquery(
   'Save the date: 2025-12-25!',
   'match(get(), "(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<date>[0-9]{2})")'
@@ -1187,7 +1187,7 @@ jsonquery('Hello world!', 'matchAll(get(), "[a-z]+", "i")')
 //   { "value": "world" }
 // ]
 
-// an example with match groups. 
+// an example with named capturing groups 
 jsonquery(
   'We will be on holiday from 2026-08-14 till 2026-08-28',
   'matchAll(get(), "(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<date>[0-9]{2})")'

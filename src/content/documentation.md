@@ -240,6 +240,7 @@ get(2)
 
 Properties support optional chaining by default, so searching for say `.oops.city` inside an object `{"address": {"city": "New York"}}` will return `null`.
 
+Properties can only be retrieved from plain JSON objects and arrays. Getting properties (or methods) from classes or functions is not supported because they may not be available on other platforms or languages and because accessing arbitrary properties may introduce security risks. When trying to get an unsupported property, an error like 'Unsafe property "constructor"' will be thrown. For example in JavaScript you cannot get the property `.length` from an `Array` or `string` in a JSON Query. Instead, you can use the function `size()`. 
 
 ### Values
 
